@@ -15,7 +15,7 @@ end
 
 -- Загрузка UI
 local successUI, UI = pcall(function()
-    return loadstring(game:HttpGet("https://raw.githubusercontent.com/ВАШ_НИК/ВАШ_РЕПО/main/utils/ui.lua", true))()
+    return loadstring(game:HttpGet("https://raw.githubusercontent.com/georgiy8/Pilgrammed-modular-utility/refs/heads/main/utils/ui.lua", true))()
 end)
 
 if not successUI then
