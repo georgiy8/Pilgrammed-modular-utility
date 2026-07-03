@@ -33,7 +33,7 @@ function UI.CreateMainGui()
     Instance.new("UICorner", titleBar).CornerRadius = UDim.new(0, 8)
 
     local titleLabel = Instance.new("TextLabel", titleBar)
-    titleLabel.Size = UDim2.new(1, -220, 1, 0)
+    titleLabel.Size = UDim2.new(1, -230, 1, 0)
     titleLabel.Position = UDim2.new(0, 15, 0, 0)
     titleLabel.BackgroundTransparency = 1
     titleLabel.Text = "🛠️ Pilgrammed Utility"
@@ -58,31 +58,23 @@ function UI.CreateMainGui()
         return btn
     end
 
-    createTitleBtn("🔽", -122, function() 
-        mainFrame.Visible = false 
-    end)
-
-    local maximizeBtn = createTitleBtn("⛶", -82, function()
+    createTitleBtn("🔽", -122, function() mainFrame.Visible = false end)
+    createTitleBtn("⛶", -82, function() 
         if not isMaximized then
             prevSize = mainFrame.Size
             prevPosition = mainFrame.Position
             mainFrame.Size = UDim2.new(1, -40, 1, -40)
             mainFrame.Position = UDim2.new(0, 20, 0, 20)
             isMaximized = true
-            maximizeBtn.Text = "⬜"
         else
             mainFrame.Size = prevSize
             mainFrame.Position = prevPosition
             isMaximized = false
-            maximizeBtn.Text = "⛶"
         end
     end)
+    createTitleBtn("❌", -42, function() gui:Destroy() end)
 
-    createTitleBtn("❌", -42, function() 
-        gui:Destroy() 
-    end)
-
-    -- Resize Cube (оставляем как было)
+    -- Resize Cube
     local resizeHandle = Instance.new("Frame", mainFrame)
     resizeHandle.Size = UDim2.new(0, 28, 0, 28)
     resizeHandle.Position = UDim2.new(1, -28, 1, -28)
@@ -94,30 +86,24 @@ function UI.CreateMainGui()
     local resizing = false
 
     resizeHandle.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            resizing = true
-        end
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then resizing = true end
     end)
 
     UserInputService.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            resizing = false
-        end
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then resizing = false end
     end)
 
     UserInputService.InputChanged:Connect(function(input)
         if resizing and input.UserInputType == Enum.UserInputType.MouseMovement then
             local mouse = UserInputService:GetMouseLocation()
             local inset = GuiService:GetGuiInset()
-            
-            local newWidth = math.clamp(mouse.X - mainFrame.AbsolutePosition.X + 10, 520, 1000)
-            local newHeight = math.clamp(mouse.Y - mainFrame.AbsolutePosition.Y - inset.Y + 10, 420, 800)
-            
-            mainFrame.Size = UDim2.new(0, newWidth, 0, newHeight)
+            local newW = math.clamp(mouse.X - mainFrame.AbsolutePosition.X + 10, 520, 1000)
+            local newH = math.clamp(mouse.Y - mainFrame.AbsolutePosition.Y - inset.Y + 10, 420, 800)
+            mainFrame.Size = UDim2.new(0, newW, 0, newH)
         end
     end)
 
-    -- Tab Panel и Content (без изменений)
+    -- Tab Panel
     local tabPanel = Instance.new("ScrollingFrame", mainFrame)
     tabPanel.Position = UDim2.new(0, 10, 0, 63)
     tabPanel.Size = UDim2.new(0, 140, 1, -80)
@@ -126,6 +112,7 @@ function UI.CreateMainGui()
     Instance.new("UICorner", tabPanel).CornerRadius = UDim.new(0, 8)
     Instance.new("UIListLayout", tabPanel).Padding = UDim.new(0, 6)
 
+    -- Content
     local contentZone = Instance.new("ScrollingFrame", mainFrame)
     contentZone.Position = UDim2.new(0, 160, 0, 63)
     contentZone.Size = UDim2.new(1, -170, 1, -80)
@@ -163,7 +150,7 @@ function UI.CreateMainGui()
     UI.Tabs = tabs
     UI.Gui = gui
 
-    print("✅ UI с кнопкой максимизации загружен!")
+    print("✅ UI с тремя кнопками загружен!")
     return UI
 end
 
