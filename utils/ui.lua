@@ -9,13 +9,12 @@ local RunService = game:GetService("RunService")
 local player = Players.LocalPlayer
 local Config = shared.PilgrammedConfig or {DefaultSettings = {}}
 
-local zoneGap, titleHeight, bottomHeight = 10, 40, 20
+local zoneGap, titleHeight, bottomHeight = 10, 40, 25
 local tabPanelWidth = 135
 
 local guiElements = {}
 local tabButtons = {}
 local tabs = {}
-local currentTab = nil
 
 local function brightenColor(color, amount)
     amount = amount or 0.2
@@ -55,21 +54,41 @@ function UI.CreateMainGui()
     titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     titleLabel.TextXAlignment = Enum.TextXAlignment.Left
 
+    -- Title Buttons
+    local function createTitleButton(text, posX, callback)
+        local btn = Instance.new("TextButton", titleBar)
+        btn.Size = UDim2.new(0, 30, 0, 30)
+        btn.Position = UDim2.new(1, posX, 0, 5)
+        btn.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+        btn.Text = text
+        btn.Font = Enum.Font.GothamBold
+        btn.TextSize = 16
+        btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        btn.BorderSizePixel = 0
+        Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 5)
+        btn.MouseButton1Click:Connect(callback)
+        return btn
+    end
+
+    createTitleButton("–", -70, function()
+        mainFrame.Visible = false
+        -- Можно добавить кнопку восстановления позже
+    end)
+
+    createTitleButton("×", -35, function()
+        gui:Destroy()
+    end)
+
     -- Tab Panel
     local tabPanel = Instance.new("ScrollingFrame", mainFrame)
     tabPanel.Name = "TabPanel"
     tabPanel.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
     tabPanel.BorderSizePixel = 0
+    tabPanel.Position = UDim2.new(0, zoneGap, 0, titleHeight + zoneGap*2)
+    tabPanel.Size = UDim2.new(0, tabPanelWidth, 1, -(titleHeight + bottomHeight + zoneGap*4))
     tabPanel.ScrollBarThickness = 6
     tabPanel.AutomaticCanvasSize = Enum.AutomaticSize.Y
-    tabPanel.ScrollingDirection = Enum.ScrollingDirection.Y
     Instance.new("UICorner", tabPanel).CornerRadius = UDim.new(0, 6)
-
-    local tabPadding = Instance.new("UIPadding", tabPanel)
-    tabPadding.PaddingLeft = UDim.new(0, 8)
-    tabPadding.PaddingRight = UDim.new(0, 8)
-    tabPadding.PaddingTop = UDim.new(0, 8)
-    tabPadding.PaddingBottom = UDim.new(0, 8)
 
     local tabLayout = Instance.new("UIListLayout", tabPanel)
     tabLayout.Padding = UDim.new(0, 6)
@@ -80,6 +99,8 @@ function UI.CreateMainGui()
     contentZone.Name = "ContentZone"
     contentZone.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     contentZone.BorderSizePixel = 0
+    contentZone.Position = UDim2.new(0, tabPanelWidth + zoneGap*2, 0, titleHeight + zoneGap*2)
+    contentZone.Size = UDim2.new(1, -(tabPanelWidth + zoneGap*3), 1, -(titleHeight + bottomHeight + zoneGap*4))
     contentZone.ScrollBarThickness = 6
     contentZone.AutomaticCanvasSize = Enum.AutomaticSize.Y
     Instance.new("UICorner", contentZone).CornerRadius = UDim.new(0, 6)
@@ -88,14 +109,14 @@ function UI.CreateMainGui()
     contentLayout.Padding = UDim.new(0, 12)
     contentLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
-    -- Сохраняем в UI
+    -- Сохранение
     UI.MainFrame = mainFrame
     UI.TabPanel = tabPanel
     UI.ContentZone = contentZone
     UI.Tabs = tabs
     UI.Gui = gui
 
-    -- Drag functionality
+    -- Drag
     local dragging = false
     local dragStart, startPos
 
@@ -115,27 +136,20 @@ function UI.CreateMainGui()
     end)
 
     UserInputService.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            dragging = false
-        end
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then dragging = false end
     end)
 
+    print("✅ UI System loaded with title buttons")
     return UI
 end
 
--- Функция создания новой вкладки (будет использоваться в модулях)
 function UI.CreateTab(name, icon, order)
-    local tab = {
-        Name = name,
-        Container = nil,
-        Button = nil
-    }
+    local tab = { Name = name, Container = nil, Button = nil }
 
-    -- Создаём кнопку таба
     local btn = Instance.new("TextButton")
-    btn.Size = UDim2.new(1, 0, 0, 32)
+    btn.Size = UDim2.new(1, 0, 0, 34)
     btn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-    btn.Text = (icon or "") .. "  " .. name
+    btn.Text = (icon or "•") .. "  " .. name
     btn.Font = Enum.Font.Gotham
     btn.TextSize = 15
     btn.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -146,25 +160,21 @@ function UI.CreateTab(name, icon, order)
 
     tab.Button = btn
 
-    -- Создаём контейнер для контента
     local container = Instance.new("Frame")
     container.Size = UDim2.new(1, 0, 0, 0)
     container.BackgroundTransparency = 1
     container.AutomaticSize = Enum.AutomaticSize.Y
     container.Visible = false
-    container.LayoutOrder = 1
+    container.LayoutOrder = #tabs + 1
     container.Parent = UI.ContentZone
 
-    local containerLayout = Instance.new("UIListLayout", container)
-    containerLayout.Padding = UDim.new(0, 10)
-    containerLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    Instance.new("UIListLayout", container).Padding = UDim.new(0, 10)
 
     tab.Container = container
 
     table.insert(tabs, tab)
     table.insert(tabButtons, btn)
 
-    -- Переключение табов
     btn.MouseButton1Click:Connect(function()
         for _, t in ipairs(tabs) do
             t.Container.Visible = false
@@ -172,10 +182,7 @@ function UI.CreateTab(name, icon, order)
         container.Visible = true
     end)
 
-    -- Первый таб делаем видимым
-    if #tabs == 1 then
-        container.Visible = true
-    end
+    if #tabs == 1 then container.Visible = true end
 
     return container
 end
