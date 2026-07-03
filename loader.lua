@@ -3,7 +3,7 @@ local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
 -- Загрузка конфига
-local Config = loadstring(game:HttpGet("https://github.com/georgiy8/Pilgrammed-modular-utility/blob/main/Config.lua"))()
+local Config = loadstring(game:HttpGet("https://raw.githubusercontent.com/georgiy8/Pilgrammed-modular-utility/refs/heads/main/Config.lua"))()
 -- Или если тестируешь локально:
 -- local Config = require(script.Parent.config)
 
