@@ -2,20 +2,20 @@
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
-print("🔄 Pilgrammed Utility Modular Loader v1")
+print("🔄 Pilgrammed Utility Modular Loader")
 
--- Загрузка конфига
+-- Config
 local successConfig, Config = pcall(function()
-    return loadstring(game:HttpGet("https://raw.githubusercontent.com/georgiy8/Pilgrammed-modular-utility/refs/heads/main/Config.lua", true))()
+    return loadstring(game:HttpGet("https://raw.githubusercontent.com/georgiy8/Pilgrammed-modular-utility/main/config.lua", true))()
 end)
 
 if not successConfig then
     warn("❌ Ошибка загрузки config.lua")
 end
 
--- Загрузка UI
+-- UI
 local successUI, UI = pcall(function()
-    return loadstring(game:HttpGet("https://raw.githubusercontent.com/georgiy8/Pilgrammed-modular-utility/refs/heads/main/utils/ui.lua", true))()
+    return loadstring(game:HttpGet("https://raw.githubusercontent.com/georgiy8/Pilgrammed-modular-utility/main/utils/ui.lua", true))()
 end)
 
 if not successUI then
@@ -24,15 +24,15 @@ if not successUI then
 end
 
 local guiSystem = UI.CreateMainGui()
-
 print("✅ GUI создан успешно")
 
--- Загрузка модулей
+-- Модули
 local modules = {"settings"}
 
 for _, moduleName in ipairs(modules) do
     local success, err = pcall(function()
-        local moduleCode = game:HttpGet("https://github.com/georgiy8/Pilgrammed-modular-utility/tree/main/modules/" .. moduleName .. ".lua", true)
+        local url = "https://raw.githubusercontent.com/georgiy8/Pilgrammed-modular-utility/main/modules/" .. moduleName .. ".lua"
+        local moduleCode = game:HttpGet(url, true)
         local func = loadstring(moduleCode)
         func(guiSystem)
     end)
