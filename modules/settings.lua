@@ -26,3 +26,4 @@ return function(UI)
 
     print("✅ Settings tab успешно создан")
 end
+
