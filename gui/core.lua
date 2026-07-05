@@ -94,6 +94,8 @@ function Core:CreateWindow(Settings)
 
     self.TitleBar = TitleBar
 
+    Drag.Enable(TitleBar, MainFrame)
+
     --------------------------------------------------------
 
     local Title = Instance.new("TextLabel")
