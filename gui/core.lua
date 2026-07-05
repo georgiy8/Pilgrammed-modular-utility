@@ -160,7 +160,7 @@ function Core:CreateWindow(Settings)
     self.Content = Content
 
     --------------------------------------------------------
-     Resize Handle
+    -- Resize Handle
     --------------------------------------------------------
 
     local ResizeHandle = Instance.new("Frame")
