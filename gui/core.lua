@@ -934,14 +934,38 @@ end
 -- Window Control Methods
 ------------------------------------------------------------
 function Window:Minimize()
-    if self.MainFrame then
-        self.MainFrame.Visible = false
+    if not self.MainFrame or not self.TitleBar then return end
+    
+    self.IsMinimized = true
+    
+    -- Скрываем всё кроме TitleBar
+    for _, child in ipairs(self.MainFrame:GetChildren()) do
+        if child ~= self.TitleBar then
+            child.Visible = false
+        end
     end
+    
+    -- Уменьшаем высоту окна до высоты TitleBar
+    self.OriginalHeight = self.MainFrame.Size.Y.Offset
+    self.MainFrame.Size = UDim2.fromOffset(self.MainFrame.Size.X.Offset, 38)
 end
 
 function Window:Maximize()
-    if self.MainFrame then
-        self.MainFrame.Visible = true
+    if not self.MainFrame then return end
+    
+    self.IsMinimized = false
+    
+    -- Показываем всё обратно
+    for _, child in ipairs(self.MainFrame:GetChildren()) do
+        child.Visible = true
+    end
+    
+    -- Возвращаем прежний размер
+    if self.OriginalHeight then
+        self.MainFrame.Size = UDim2.fromOffset(
+            self.MainFrame.Size.X.Offset, 
+            self.OriginalHeight
+        )
     end
 end
 
