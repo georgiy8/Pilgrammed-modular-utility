@@ -102,7 +102,9 @@ function Library:CreateWindow(Settings)
 
     local selfWindow = setmetatable({},Window)
 
-    selfWindow.Title = Settings.Title or "Pilgrammed Utility"
+    selfWindow.Library = self
+
+    selfWindow.TitleText = Settings.Title or "Pilgrammed Utility"
 
     selfWindow.Width = Settings.Width or 650
 
@@ -212,7 +214,7 @@ function Library:CreateWindow(Settings)
 
     )
 
-    Title.Text = selfWindow.Title
+    Title.Text = selfWindow.TitleText
 
     Title.Font = Enum.Font.GothamBold
 
@@ -222,7 +224,7 @@ function Library:CreateWindow(Settings)
 
     Title.TextXAlignment = Enum.TextXAlignment.Left
 
-    selfWindow.Title = Title
+   selfWindow.TitleLabel = Title
 
     --------------------------------------------------------
     -- Tabs Panel
@@ -746,35 +748,35 @@ end
 
 local WidgetMethods = {
 
-    Label = "label",
+    "Label",
 
-    Button = "button",
+    "Button",
 
-    Toggle = "toggle",
+    "Toggle",
 
-    Slider = "slider",
+    "Slider",
 
-    Dropdown = "dropdown",
+    "Dropdown",
 
-    Textbox = "textbox",
+    "Textbox",
 
-    Separator = "separator",
+    "Separator",
 
-    Keybind = "keybind"
+    "Keybind"
 
 }
 
-for MethodName, RegistryName in pairs(WidgetMethods) do
+for _, WidgetName in ipairs(WidgetMethods) do
 
-    Section["Add"..MethodName] = function(self, Settings)
+    Section["Add"..WidgetName] = function(self, Settings)
 
-        local Widget = Widgets[RegistryName]
+        local Widget = Widgets[WidgetName]
 
         assert(
 
             Widget,
 
-            "Widget '"..RegistryName.."' is not registered."
+            "Widget '"..WidgetName.."' is not registered."
 
         )
 
@@ -789,3 +791,144 @@ for MethodName, RegistryName in pairs(WidgetMethods) do
     end
 
 end
+
+------------------------------------------------------------
+-- Window Show
+------------------------------------------------------------
+
+function Window:Show()
+
+    if self.Gui then
+
+        self.Gui.Enabled = true
+
+    end
+
+end
+
+------------------------------------------------------------
+-- Window Hide
+------------------------------------------------------------
+
+function Window:Hide()
+
+    if self.Gui then
+
+        self.Gui.Enabled = false
+
+    end
+
+end
+
+------------------------------------------------------------
+-- Window Destroy
+------------------------------------------------------------
+
+function Window:Destroy()
+
+    if self.Gui then
+
+        self.Gui:Destroy()
+    end
+
+    for Index, Object in ipairs(self.Library.Windows) do
+
+        if Object == self then
+
+            table.remove(self.Library.Windows, Index)
+
+            break
+
+        end
+
+    end
+
+end
+
+------------------------------------------------------------
+-- Window GetTab
+------------------------------------------------------------
+
+function Window:GetTab(Name)
+
+    for _, TabObject in ipairs(self.Tabs) do
+
+        if TabObject.Name == Name then
+
+            return TabObject
+        end
+
+    end
+
+    return nil
+
+end
+
+------------------------------------------------------------
+-- Tab GetSection
+------------------------------------------------------------
+
+function Tab:GetSection(Name)
+
+    for _, SectionObject in ipairs(self.Sections) do
+
+        if SectionObject.Name == Name then
+
+            return SectionObject
+        end
+
+    end
+
+    return nil
+
+end
+
+------------------------------------------------------------
+-- Window SetTitle
+------------------------------------------------------------
+
+function Window:SetTitle(Text)
+
+    self.TitleLabel.Text = Text
+
+end
+
+------------------------------------------------------------
+-- Window SetSize
+------------------------------------------------------------
+
+function Window:SetSize(X,Y)
+
+    self.Width = X
+
+    self.Height = Y
+
+    self.MainFrame.Size = UDim2.fromOffset(X,Y)
+
+end
+
+------------------------------------------------------------
+-- Library Destroy
+------------------------------------------------------------
+
+function Library:Destroy()
+
+    for _, WindowObject in ipairs(self.Windows) do
+
+        if WindowObject.Gui then
+
+            WindowObject.Gui:Destroy()
+
+        end
+
+    end
+
+    table.clear(self.Windows)
+
+end
+
+------------------------------------------------------------
+-- Return
+------------------------------------------------------------
+
+return Library
