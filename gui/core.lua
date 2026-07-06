@@ -1,10 +1,19 @@
+--========================================================--
+-- Pilgrammed GUI Library
+-- Core.lua
+--========================================================--
+
+------------------------------------------------------------
+-- Repository
+------------------------------------------------------------
+
 local REPO = "https://raw.githubusercontent.com/georgiy8/Pilgrammed-modular-utility/main/"
 
-local function Import(path)
+local function Import(Path)
 
     local Success, Result = pcall(function()
 
-        return loadstring(game:HttpGet(REPO .. path))()
+        return loadstring(game:HttpGet(REPO .. Path))()
 
     end)
 
@@ -16,174 +25,348 @@ local function Import(path)
 
 end
 
---========================================================--
--- Pilgrammed GUI Library
--- core.lua
---========================================================--
-
-local Core = {}
-Core.__index = Core
-
 ------------------------------------------------------------
--- Services
+-- Roblox Services
 ------------------------------------------------------------
 
 local Players = game:GetService("Players")
 
 local Player = Players.LocalPlayer
 
-local Drag = Import("gui/services/drag.lua")
-
-local Resize = Import("gui/services/resize.lua")
 ------------------------------------------------------------
--- Window Class
+-- Library Services
+------------------------------------------------------------
+
+local Drag = Import("gui/services/drag.lua")
+local Resize = Import("gui/services/resize.lua")
+
+------------------------------------------------------------
+-- Widgets
+------------------------------------------------------------
+
+local Widgets = Import("gui/widgets/registry.lua")
+
+------------------------------------------------------------
+-- Library
+------------------------------------------------------------
+
+local Library = {}
+
+Library.__index = Library
+
+------------------------------------------------------------
+-- Window
 ------------------------------------------------------------
 
 local Window = {}
+
 Window.__index = Window
+
+------------------------------------------------------------
+-- Tab
+------------------------------------------------------------
+
+local Tab = {}
+
+Tab.__index = Tab
+
+------------------------------------------------------------
+-- Section
+------------------------------------------------------------
+
+local Section = {}
+
+Section.__index = Section
+
+------------------------------------------------------------
+-- Constructor
+------------------------------------------------------------
+
+function Library.new()
+
+    local self = setmetatable({},Library)
+
+    self.Windows = {}
+
+    return self
+
+end
 
 ------------------------------------------------------------
 -- Create Window
 ------------------------------------------------------------
 
-function Core:CreateWindow(Settings)
+function Library:CreateWindow(Settings)
 
     Settings = Settings or {}
 
-    local self = setmetatable({}, Window)
+    local selfWindow = setmetatable({},Window)
 
-    self.Title = Settings.Title or "Pilgrammed Utility"
-    self.Width = Settings.Width or 500
-    self.Height = Settings.Height or 400
+    selfWindow.Title = Settings.Title or "Pilgrammed Utility"
+
+    selfWindow.Width = Settings.Width or 650
+
+    selfWindow.Height = Settings.Height or 420
+
+    selfWindow.Tabs = {}
+
+    selfWindow.ActiveTab = nil
 
     --------------------------------------------------------
 
     local ScreenGui = Instance.new("ScreenGui")
-    ScreenGui.Name = "PilgrammedGUI"
-    ScreenGui.ResetOnSpawn = false
-    ScreenGui.Parent = Player:WaitForChild("PlayerGui")
 
-    self.Gui = ScreenGui
+    ScreenGui.Name = "PilgrammedGUI"
+
+    ScreenGui.ResetOnSpawn = false
+
+    ScreenGui.IgnoreGuiInset = true
+
+    ScreenGui.Parent = Player.PlayerGui
+
+    selfWindow.Gui = ScreenGui
 
     --------------------------------------------------------
 
-    local MainFrame = Instance.new("Frame")
+    local Main = Instance.new("Frame")
 
-    MainFrame.Parent = ScreenGui
-    MainFrame.Size = UDim2.fromOffset(self.Width, self.Height)
-    MainFrame.Position = UDim2.new(.5,-self.Width/2,.5,-self.Height/2)
+    Main.Name = "Main"
 
-    MainFrame.BorderSizePixel = 0
-    MainFrame.BackgroundColor3 = Color3.fromRGB(35,35,35)
+    Main.Parent = ScreenGui
 
-    Instance.new("UICorner",MainFrame).CornerRadius=UDim.new(0,6)
+    Main.Size = UDim2.fromOffset(
 
-    self.MainFrame = MainFrame
+        selfWindow.Width,
 
+        selfWindow.Height
+
+    )
+
+    Main.Position = UDim2.new(
+
+        .5,
+
+        -selfWindow.Width/2,
+
+        .5,
+
+        -selfWindow.Height/2
+
+    )
+
+    Main.BackgroundColor3 = Color3.fromRGB(35,35,35)
+
+    Main.BorderSizePixel = 0
+
+    Instance.new("UICorner",Main).CornerRadius = UDim.new(0,6)
+
+    selfWindow.MainFrame = Main
+
+    --------------------------------------------------------
+    -- Title Bar
     --------------------------------------------------------
 
     local TitleBar = Instance.new("Frame")
 
-    TitleBar.Parent = MainFrame
-    TitleBar.Size = UDim2.new(1,0,0,40)
+    TitleBar.Parent = Main
+
+    TitleBar.Size = UDim2.new(
+
+        1,
+
+        0,
+
+        0,
+
+        38
+
+    )
+
+    TitleBar.BackgroundColor3 = Color3.fromRGB(48,48,48)
 
     TitleBar.BorderSizePixel = 0
-    TitleBar.BackgroundColor3 = Color3.fromRGB(50,50,50)
 
-    Instance.new("UICorner",TitleBar).CornerRadius=UDim.new(0,6)
+    Instance.new("UICorner",TitleBar).CornerRadius = UDim.new(0,6)
 
-    self.TitleBar = TitleBar
-
-    Drag.Enable(TitleBar, MainFrame)
+    selfWindow.TitleBar = TitleBar
 
     --------------------------------------------------------
 
     local Title = Instance.new("TextLabel")
 
     Title.Parent = TitleBar
-    Title.Size = UDim2.new(1,-20,1,0)
-    Title.Position = UDim2.fromOffset(10,0)
 
     Title.BackgroundTransparency = 1
 
+    Title.Position = UDim2.fromOffset(12,0)
+
+    Title.Size = UDim2.new(
+
+        1,
+
+        -24,
+
+        1,
+
+        0
+
+    )
+
+    Title.Text = selfWindow.Title
+
     Title.Font = Enum.Font.GothamBold
-    Title.TextSize = 18
 
     Title.TextColor3 = Color3.new(1,1,1)
 
+    Title.TextSize = 17
+
     Title.TextXAlignment = Enum.TextXAlignment.Left
 
-    Title.Text = self.Title
+    selfWindow.Title = Title
+
+    --------------------------------------------------------
+    -- Tabs Panel
+    --------------------------------------------------------
+
+    local TabsPanel = Instance.new("ScrollingFrame")
+
+    TabsPanel.Parent = Main
+
+    TabsPanel.Position = UDim2.fromOffset(10,48)
+
+    TabsPanel.Size = UDim2.new(
+
+        0,
+
+        145,
+
+        1,
+
+        -58
+
+    )
+
+    TabsPanel.BackgroundColor3 = Color3.fromRGB(45,45,45)
+
+    TabsPanel.BorderSizePixel = 0
+
+    TabsPanel.ScrollBarThickness = 4
+
+    TabsPanel.CanvasSize = UDim2.new()
+
+    Instance.new("UICorner",TabsPanel).CornerRadius = UDim.new(0,6)
+
+    selfWindow.TabPanel = TabsPanel
 
     --------------------------------------------------------
 
-    local TabPanel = Instance.new("ScrollingFrame")
+    local TabsLayout = Instance.new("UIListLayout")
 
-    TabPanel.Parent = MainFrame
+    TabsLayout.Parent = TabsPanel
 
-    TabPanel.Position = UDim2.fromOffset(10,50)
-    TabPanel.Size = UDim2.new(0,120,1,-80)
+    TabsLayout.Padding = UDim.new(0,5)
 
-    TabPanel.BorderSizePixel = 0
+    TabsLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
 
-    TabPanel.BackgroundColor3 = Color3.fromRGB(45,45,45)
+        TabsPanel.CanvasSize = UDim2.fromOffset(
 
-    TabPanel.ScrollBarThickness = 5
+            0,
 
-    Instance.new("UICorner",TabPanel).CornerRadius=UDim.new(0,6)
+            TabsLayout.AbsoluteContentSize.Y+8
 
-    self.TabPanel = TabPanel
+        )
+
+    end)
 
     --------------------------------------------------------
-
-    local Layout = Instance.new("UIListLayout")
-
-    Layout.Parent = TabPanel
-
-    Layout.Padding = UDim.new(0,5)
-
+    -- Content
     --------------------------------------------------------
 
     local Content = Instance.new("Frame")
 
-    Content.Parent = MainFrame
+    Content.Parent = Main
 
-    Content.Position = UDim2.fromOffset(140,50)
-    Content.Size = UDim2.new(1,-150,1,-80)
+    Content.Position = UDim2.fromOffset(165,48)
+
+    Content.Size = UDim2.new(
+
+        1,
+
+        -175,
+
+        1,
+
+        -58
+
+    )
 
     Content.BackgroundColor3 = Color3.fromRGB(40,40,40)
 
     Content.BorderSizePixel = 0
 
-    Instance.new("UICorner",Content).CornerRadius=UDim.new(0,6)
+    Instance.new("UICorner",Content).CornerRadius = UDim.new(0,6)
 
-    self.Content = Content
-
-    --------------------------------------------------------
-    -- Resize Handle
-    --------------------------------------------------------
-
-    local ResizeHandle = Instance.new("Frame")
-
-    ResizeHandle.Name = "ResizeHandle"
-    ResizeHandle.Parent = MainFrame
-
-    ResizeHandle.Size = UDim2.fromOffset(14,14)
-    ResizeHandle.AnchorPoint = Vector2.new(1,1)
-    ResizeHandle.Position = UDim2.new(1,-3,1,-3)
-
-    ResizeHandle.BackgroundColor3 = Color3.fromRGB(90,90,90)
-    ResizeHandle.BorderSizePixel = 0
-
-    Instance.new("UICorner", ResizeHandle).CornerRadius = UDim.new(0,3)
-
-    Resize.Enable(MainFrame, ResizeHandle)
+    selfWindow.Content = Content
 
     --------------------------------------------------------
+    -- Resize
+    --------------------------------------------------------
 
-    self.Tabs = {}
+    local Handle = Instance.new("Frame")
 
-    return self
+    Handle.Parent = Main
+
+    Handle.AnchorPoint = Vector2.new(1,1)
+
+    Handle.Position = UDim2.new(
+
+        1,
+
+        -3,
+
+        1,
+
+        -3
+
+    )
+
+    Handle.Size = UDim2.fromOffset(14,14)
+
+    Handle.BackgroundColor3 = Color3.fromRGB(90,90,90)
+
+    Handle.BorderSizePixel = 0
+
+    Instance.new("UICorner",Handle).CornerRadius = UDim.new(0,3)
+
+    selfWindow.ResizeHandle = Handle
+
+    --------------------------------------------------------
+
+    Drag.Enable(
+
+        TitleBar,
+
+        Main
+
+    )
+
+    Resize.Enable(
+
+        Main,
+
+        Handle
+
+    )
+
+    table.insert(
+
+        self.Windows,
+
+        selfWindow
+
+    )
+
+    return selfWindow
 
 end
 
@@ -195,14 +378,27 @@ function Window:CreateTab(Settings)
 
     Settings = Settings or {}
 
-    local Name = Settings.Name or "Tab"
-    local Icon = Settings.Icon or ""
+    local selfTab = setmetatable({}, Tab)
+
+    selfTab.Window = self
+
+    selfTab.Name = Settings.Name or "Tab"
+
+    selfTab.Icon = Settings.Icon or ""
+
+    selfTab.Sections = {}
+
+    --------------------------------------------------------
+    -- Button
+    --------------------------------------------------------
 
     local Button = Instance.new("TextButton")
 
+    Button.Name = selfTab.Name
+
     Button.Parent = self.TabPanel
 
-    Button.Size = UDim2.new(1,-8,0,30)
+    Button.Size = UDim2.new(1,-10,0,32)
 
     Button.BackgroundColor3 = Color3.fromRGB(60,60,60)
 
@@ -212,56 +408,384 @@ function Window:CreateTab(Settings)
 
     Button.TextColor3 = Color3.new(1,1,1)
 
-    Button.TextSize = 15
+    Button.TextSize = 14
 
-    Button.Text = Icon.." "..Name
+    Button.Text = selfTab.Icon .. " " .. selfTab.Name
 
-    Instance.new("UICorner",Button).CornerRadius=UDim.new(0,4)
+    Instance.new("UICorner",Button).CornerRadius = UDim.new(0,4)
+
+    selfTab.Button = Button
 
     --------------------------------------------------------
+    -- Container
+    --------------------------------------------------------
 
-    local Container = Instance.new("Frame")
+    local Container = Instance.new("ScrollingFrame")
+
+    Container.Name = selfTab.Name
 
     Container.Parent = self.Content
 
     Container.Size = UDim2.fromScale(1,1)
 
+    Container.CanvasSize = UDim2.new()
+
+    Container.ScrollBarThickness = 4
+
     Container.BackgroundTransparency = 1
+
+    Container.BorderSizePixel = 0
 
     Container.Visible = false
 
+    selfTab.Container = Container
+
     --------------------------------------------------------
 
-    Button.MouseButton1Click:Connect(function()
+    local Padding = Instance.new("UIPadding")
 
-        for _,Tab in pairs(self.Tabs) do
-            Tab.Container.Visible=false
-        end
+    Padding.Parent = Container
 
-        Container.Visible=true
+    Padding.PaddingTop = UDim.new(0,8)
+
+    Padding.PaddingBottom = UDim.new(0,8)
+
+    Padding.PaddingLeft = UDim.new(0,8)
+
+    Padding.PaddingRight = UDim.new(0,8)
+
+    --------------------------------------------------------
+
+    local Layout = Instance.new("UIListLayout")
+
+    Layout.Parent = Container
+
+    Layout.Padding = UDim.new(0,8)
+
+    Layout.SortOrder = Enum.SortOrder.LayoutOrder
+
+    Layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+
+        Container.CanvasSize = UDim2.fromOffset(
+
+            0,
+
+            Layout.AbsoluteContentSize.Y + 10
+
+        )
 
     end)
 
     --------------------------------------------------------
 
-    local Tab={
+    Button.MouseButton1Click:Connect(function()
 
-        Button=Button,
+        selfTab:Select()
 
-        Container=Container
+    end)
 
-    }
+    --------------------------------------------------------
 
-    table.insert(self.Tabs,Tab)
+    table.insert(
 
-    if #self.Tabs==1 then
-        Container.Visible=true
+        self.Tabs,
+
+        selfTab
+
+    )
+
+    if #self.Tabs == 1 then
+
+        selfTab:Select()
+
     end
 
-    return Tab
+    return selfTab
 
 end
 
 ------------------------------------------------------------
+-- Select Tab
+------------------------------------------------------------
 
-return Core
+function Tab:Select()
+
+    local Window = self.Window
+
+    for _,CurrentTab in ipairs(Window.Tabs) do
+
+        CurrentTab.Container.Visible = false
+
+        CurrentTab.Button.BackgroundColor3 = Color3.fromRGB(60,60,60)
+
+    end
+
+    self.Container.Visible = true
+
+    self.Button.BackgroundColor3 = Color3.fromRGB(82,82,82)
+
+    Window.ActiveTab = self
+
+end
+
+------------------------------------------------------------
+-- Destroy Tab
+------------------------------------------------------------
+
+function Tab:Destroy()
+
+    if self.Button then
+
+        self.Button:Destroy()
+
+    end
+
+    if self.Container then
+
+        self.Container:Destroy()
+
+    end
+
+    for Index,TabObject in ipairs(self.Window.Tabs) do
+
+        if TabObject == self then
+
+            table.remove(
+
+                self.Window.Tabs,
+
+                Index
+
+            )
+
+            break
+
+        end
+
+    end
+
+end
+
+------------------------------------------------------------
+-- Create Section
+------------------------------------------------------------
+
+function Tab:CreateSection(Settings)
+
+    Settings = Settings or {}
+
+    local selfSection = setmetatable({}, Section)
+
+    selfSection.Tab = self
+
+    selfSection.Name = Settings.Name or "Section"
+
+    --------------------------------------------------------
+    -- Section Frame
+    --------------------------------------------------------
+
+    local Frame = Instance.new("Frame")
+
+    Frame.Name = selfSection.Name
+
+    Frame.Parent = self.Container
+
+    Frame.BackgroundColor3 = Color3.fromRGB(47,47,47)
+
+    Frame.BorderSizePixel = 0
+
+    Frame.AutomaticSize = Enum.AutomaticSize.Y
+
+    Frame.Size = UDim2.new(1,0,0,0)
+
+    Instance.new("UICorner",Frame).CornerRadius = UDim.new(0,6)
+
+    selfSection.Frame = Frame
+
+    --------------------------------------------------------
+    -- Padding
+    --------------------------------------------------------
+
+    local Padding = Instance.new("UIPadding")
+
+    Padding.Parent = Frame
+
+    Padding.PaddingTop = UDim.new(0,8)
+
+    Padding.PaddingBottom = UDim.new(0,8)
+
+    Padding.PaddingLeft = UDim.new(0,8)
+
+    Padding.PaddingRight = UDim.new(0,8)
+
+    --------------------------------------------------------
+    -- Title
+    --------------------------------------------------------
+
+    local Title = Instance.new("TextLabel")
+
+    Title.Parent = Frame
+
+    Title.BackgroundTransparency = 1
+
+    Title.Size = UDim2.new(1,0,0,22)
+
+    Title.Font = Enum.Font.GothamBold
+
+    Title.Text = selfSection.Name
+
+    Title.TextColor3 = Color3.new(1,1,1)
+
+    Title.TextSize = 15
+
+    Title.TextXAlignment = Enum.TextXAlignment.Left
+
+    selfSection.Title = Title
+
+    --------------------------------------------------------
+    -- Container
+    --------------------------------------------------------
+
+    local Container = Instance.new("Frame")
+
+    Container.Name = "Container"
+
+    Container.Parent = Frame
+
+    Container.Position = UDim2.fromOffset(0,28)
+
+    Container.Size = UDim2.new(1,0,0,0)
+
+    Container.BackgroundTransparency = 1
+
+    Container.AutomaticSize = Enum.AutomaticSize.Y
+
+    selfSection.Container = Container
+
+    --------------------------------------------------------
+    -- Layout
+    --------------------------------------------------------
+
+    local Layout = Instance.new("UIListLayout")
+
+    Layout.Parent = Container
+
+    Layout.Padding = UDim.new(0,6)
+
+    Layout.SortOrder = Enum.SortOrder.LayoutOrder
+
+    selfSection.Layout = Layout
+
+    --------------------------------------------------------
+
+    table.insert(
+
+        self.Sections,
+
+        selfSection
+
+    )
+
+    return selfSection
+
+end
+
+------------------------------------------------------------
+-- Destroy Section
+------------------------------------------------------------
+
+function Section:Destroy()
+
+    if self.Frame then
+
+        self.Frame:Destroy()
+
+    end
+
+    for Index,Object in ipairs(self.Tab.Sections) do
+
+        if Object == self then
+
+            table.remove(
+
+                self.Tab.Sections,
+
+                Index
+
+            )
+
+            break
+
+        end
+
+    end
+
+end
+
+------------------------------------------------------------
+-- Clear Section
+------------------------------------------------------------
+
+function Section:Clear()
+
+    for _,Child in ipairs(self.Container:GetChildren()) do
+
+        if not Child:IsA("UIListLayout") then
+
+            Child:Destroy()
+
+        end
+
+    end
+
+end
+
+------------------------------------------------------------
+-- Widget API
+------------------------------------------------------------
+
+local WidgetMethods = {
+
+    Label = "label",
+
+    Button = "button",
+
+    Toggle = "toggle",
+
+    Slider = "slider",
+
+    Dropdown = "dropdown",
+
+    Textbox = "textbox",
+
+    Separator = "separator",
+
+    Keybind = "keybind"
+
+}
+
+for MethodName, RegistryName in pairs(WidgetMethods) do
+
+    Section["Add"..MethodName] = function(self, Settings)
+
+        local Widget = Widgets[RegistryName]
+
+        assert(
+
+            Widget,
+
+            "Widget '"..RegistryName.."' is not registered."
+
+        )
+
+        return Widget.Create(
+
+            self.Container,
+
+            Settings or {}
+
+        )
+
+    end
+
+end
