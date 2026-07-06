@@ -95,281 +95,155 @@ end
 ------------------------------------------------------------
 -- Create Window
 ------------------------------------------------------------
-
 function Library:CreateWindow(Settings)
-
     Settings = Settings or {}
-
-    local selfWindow = setmetatable({},Window)
-
+    
+    local selfWindow = setmetatable({}, Window)
     selfWindow.Library = self
-
+    
+    -- Защита (чтобы не падало, даже если забыли сделать Library.new())
+    self.Windows = self.Windows or {}
+    
     selfWindow.TitleText = Settings.Title or "Pilgrammed Utility"
-
     selfWindow.Width = Settings.Width or 650
-
     selfWindow.Height = Settings.Height or 420
-
     selfWindow.Tabs = {}
-
     selfWindow.ActiveTab = nil
-
+    
     --------------------------------------------------------
-
     local ScreenGui = Instance.new("ScreenGui")
-
     ScreenGui.Name = "PilgrammedGUI"
-
     ScreenGui.ResetOnSpawn = false
-
     ScreenGui.IgnoreGuiInset = true
-
     ScreenGui.Parent = Player.PlayerGui
-
     selfWindow.Gui = ScreenGui
-
     --------------------------------------------------------
-
     local Main = Instance.new("Frame")
-
     Main.Name = "Main"
-
     Main.Parent = ScreenGui
-
     Main.Size = UDim2.fromOffset(
-
         selfWindow.Width,
-
         selfWindow.Height
-
     )
-
     Main.Position = UDim2.new(
-
         .5,
-
         -selfWindow.Width/2,
-
         .5,
-
         -selfWindow.Height/2
-
     )
-
     Main.BackgroundColor3 = Color3.fromRGB(35,35,35)
-
     Main.BorderSizePixel = 0
-
     Instance.new("UICorner",Main).CornerRadius = UDim.new(0,6)
-
     selfWindow.MainFrame = Main
-
     --------------------------------------------------------
     -- Title Bar
     --------------------------------------------------------
-
     local TitleBar = Instance.new("Frame")
-
     TitleBar.Parent = Main
-
     TitleBar.Size = UDim2.new(
-
         1,
-
         0,
-
         0,
-
         38
-
     )
-
     TitleBar.BackgroundColor3 = Color3.fromRGB(48,48,48)
-
     TitleBar.BorderSizePixel = 0
-
     Instance.new("UICorner",TitleBar).CornerRadius = UDim.new(0,6)
-
     selfWindow.TitleBar = TitleBar
-
     --------------------------------------------------------
-
     local Title = Instance.new("TextLabel")
-
     Title.Parent = TitleBar
-
     Title.BackgroundTransparency = 1
-
     Title.Position = UDim2.fromOffset(12,0)
-
     Title.Size = UDim2.new(
-
         1,
-
         -24,
-
         1,
-
         0
-
     )
-
     Title.Text = selfWindow.TitleText
-
     Title.Font = Enum.Font.GothamBold
-
     Title.TextColor3 = Color3.new(1,1,1)
-
     Title.TextSize = 17
-
     Title.TextXAlignment = Enum.TextXAlignment.Left
-
-   selfWindow.TitleLabel = Title
-
+    selfWindow.TitleLabel = Title
     --------------------------------------------------------
     -- Tabs Panel
     --------------------------------------------------------
-
     local TabsPanel = Instance.new("ScrollingFrame")
-
     TabsPanel.Parent = Main
-
     TabsPanel.Position = UDim2.fromOffset(10,48)
-
     TabsPanel.Size = UDim2.new(
-
         0,
-
         145,
-
         1,
-
         -58
-
     )
-
     TabsPanel.BackgroundColor3 = Color3.fromRGB(45,45,45)
-
     TabsPanel.BorderSizePixel = 0
-
     TabsPanel.ScrollBarThickness = 4
-
     TabsPanel.CanvasSize = UDim2.new()
-
     Instance.new("UICorner",TabsPanel).CornerRadius = UDim.new(0,6)
-
     selfWindow.TabPanel = TabsPanel
-
     --------------------------------------------------------
-
     local TabsLayout = Instance.new("UIListLayout")
-
     TabsLayout.Parent = TabsPanel
-
     TabsLayout.Padding = UDim.new(0,5)
-
     TabsLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-
         TabsPanel.CanvasSize = UDim2.fromOffset(
-
             0,
-
             TabsLayout.AbsoluteContentSize.Y+8
-
         )
-
     end)
-
     --------------------------------------------------------
     -- Content
     --------------------------------------------------------
-
     local Content = Instance.new("Frame")
-
     Content.Parent = Main
-
     Content.Position = UDim2.fromOffset(165,48)
-
     Content.Size = UDim2.new(
-
         1,
-
         -175,
-
         1,
-
         -58
-
     )
-
     Content.BackgroundColor3 = Color3.fromRGB(40,40,40)
-
     Content.BorderSizePixel = 0
-
     Instance.new("UICorner",Content).CornerRadius = UDim.new(0,6)
-
     selfWindow.Content = Content
-
     --------------------------------------------------------
     -- Resize
     --------------------------------------------------------
-
     local Handle = Instance.new("Frame")
-
     Handle.Parent = Main
-
     Handle.AnchorPoint = Vector2.new(1,1)
-
     Handle.Position = UDim2.new(
-
         1,
-
         -3,
-
         1,
-
         -3
-
     )
-
     Handle.Size = UDim2.fromOffset(14,14)
-
     Handle.BackgroundColor3 = Color3.fromRGB(90,90,90)
-
     Handle.BorderSizePixel = 0
-
     Instance.new("UICorner",Handle).CornerRadius = UDim.new(0,3)
-
     selfWindow.ResizeHandle = Handle
-
     --------------------------------------------------------
-
     Drag.Enable(
-
         TitleBar,
-
         Main
-
     )
-
     Resize.Enable(
-
         Main,
-
         Handle
-
     )
-
+    
     table.insert(
-
         self.Windows,
-
         selfWindow
-
     )
-
+    
     return selfWindow
-
 end
 
 ------------------------------------------------------------
