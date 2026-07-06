@@ -937,16 +937,16 @@ function Window:Minimize()
     if not self.MainFrame or not self.TitleBar then return end
     
     self.IsMinimized = true
+    self.OriginalHeight = self.MainFrame.Size.Y.Offset
     
-    -- Скрываем всё кроме TitleBar
     for _, child in ipairs(self.MainFrame:GetChildren()) do
-        if child ~= self.TitleBar then
+        -- Пропускаем UICorner, UIListLayout и т.д.
+        if child:IsA("GuiObject") and child ~= self.TitleBar then
             child.Visible = false
         end
     end
     
-    -- Уменьшаем высоту окна до высоты TitleBar
-    self.OriginalHeight = self.MainFrame.Size.Y.Offset
+    -- Уменьшаем высоту до заголовка
     self.MainFrame.Size = UDim2.fromOffset(self.MainFrame.Size.X.Offset, 38)
 end
 
@@ -955,12 +955,13 @@ function Window:Maximize()
     
     self.IsMinimized = false
     
-    -- Показываем всё обратно
     for _, child in ipairs(self.MainFrame:GetChildren()) do
-        child.Visible = true
+        if child:IsA("GuiObject") then
+            child.Visible = true
+        end
     end
     
-    -- Возвращаем прежний размер
+    -- Возвращаем оригинальный размер
     if self.OriginalHeight then
         self.MainFrame.Size = UDim2.fromOffset(
             self.MainFrame.Size.X.Offset, 
