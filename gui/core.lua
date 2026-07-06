@@ -104,6 +104,8 @@ function Library:CreateWindow(Settings)
 
     selfWindow.Library = self
 
+    self.Windows = self.Windows or {}
+
     selfWindow.TitleText = Settings.Title or "Pilgrammed Utility"
 
     selfWindow.Width = Settings.Width or 650
