@@ -223,11 +223,11 @@ end
 
 --------------------------------------------------------
 
-local MinimizeButton = CreateControl("─")
+local MinimizeButton = CreateControl("-")
 
-local MaximizeButton = CreateControl("□")
+local MaximizeButton = CreateControl("[]")
 
-local CloseButton = CreateControl("✕")
+local CloseButton = CreateControl("X")
 
 --------------------------------------------------------
 
