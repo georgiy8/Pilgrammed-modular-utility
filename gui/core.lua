@@ -150,6 +150,92 @@ function Library:CreateWindow(Settings)
     TitleBar.BorderSizePixel = 0
     Instance.new("UICorner",TitleBar).CornerRadius = UDim.new(0,6)
     selfWindow.TitleBar = TitleBar
+    
+ --------------------------------------------------------
+ -- Window Controls
+ --------------------------------------------------------
+
+local Controls = Instance.new("Frame")
+
+Controls.Parent = TitleBar
+
+Controls.AnchorPoint = Vector2.new(1,0)
+
+Controls.Position = UDim2.new(1,-8,0,5)
+
+Controls.Size = UDim2.fromOffset(90,28)
+
+Controls.BackgroundTransparency = 1
+
+--------------------------------------------------------
+
+local Layout = Instance.new("UIListLayout")
+
+Layout.Parent = Controls
+
+Layout.FillDirection = Enum.FillDirection.Horizontal
+
+Layout.HorizontalAlignment = Enum.HorizontalAlignment.Right
+
+Layout.Padding = UDim.new(0,4)
+
+--------------------------------------------------------
+
+local function CreateControl(Text)
+
+    local Button = Instance.new("TextButton")
+
+    Button.Size = UDim2.fromOffset(24,24)
+
+    Button.BackgroundColor3 = Color3.fromRGB(60,60,60)
+
+    Button.BorderSizePixel = 0
+
+    Button.Font = Enum.Font.GothamBold
+
+    Button.Text = Text
+
+    Button.TextColor3 = Color3.new(1,1,1)
+
+    Button.TextSize = 14
+
+    Button.AutoButtonColor = false
+
+    Instance.new("UICorner",Button).CornerRadius = UDim.new(0,4)
+
+    Button.Parent = Controls
+
+    Button.MouseEnter:Connect(function()
+
+        Button.BackgroundColor3 = Color3.fromRGB(82,82,82)
+
+    end)
+
+    Button.MouseLeave:Connect(function()
+
+        Button.BackgroundColor3 = Color3.fromRGB(60,60,60)
+
+    end)
+
+    return Button
+
+end
+
+--------------------------------------------------------
+
+local MinimizeButton = CreateControl("─")
+
+local MaximizeButton = CreateControl("□")
+
+local CloseButton = CreateControl("✕")
+
+--------------------------------------------------------
+
+selfWindow.MinimizeButton = MinimizeButton
+
+selfWindow.MaximizeButton = MaximizeButton
+
+selfWindow.CloseButton = CloseButton
     --------------------------------------------------------
     local Title = Instance.new("TextLabel")
     Title.Parent = TitleBar
