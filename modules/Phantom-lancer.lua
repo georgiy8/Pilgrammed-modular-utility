@@ -22,30 +22,29 @@ return function(Window)
     })
     
     --------------------------------------------------------
-    -- Main Image with error handling
+    -- Main Image
     --------------------------------------------------------
     local success, err = pcall(function()
         Images:AddImage({
-            Image = getcustomasset("assets/Phantom-lancer/Images/phantom_lancer_pl.jpg"),
+            Image = getcustomasset("assets/phantom.jpg"),
             Height = 220,
             AspectRatio = 16/9,
             BackgroundTransparency = 0,
-            BackgroundColor = Color3.fromRGB(30, 30, 30)
+            BackgroundColor = Color3.fromRGB(25, 25, 25)
         })
     end)
     
-    if not success then
+    if success then
+        Images:AddLabel({
+            Text = "✅ Image loaded successfully"
+        })
+    else
         Images:AddLabel({
             Text = "❌ Failed to load image"
         })
         Images:AddLabel({
-            Text = "Path: assets/Phantom-lancer/Images/phantom_lancer_pl.jpg"
+            Text = "Path: assets/phantom.jpg"
         })
-        warn("Image load error:", err)
-    else
-        Images:AddLabel({
-            Text = "✅ Phantom Lancer image loaded"
-        })
+        warn("Image Error:", err)
     end
-    
 end
