@@ -745,6 +745,10 @@ local WidgetMethods = {
 
     "Keybind"
 
+    "Image"
+
+    "Sound"
+
 }
 
 for _, WidgetName in ipairs(WidgetMethods) do
