@@ -234,18 +234,28 @@ local CloseButton = CreateControl("X")
 selfWindow.MinimizeButton = MinimizeButton
 selfWindow.MaximizeButton = MaximizeButton
 selfWindow.CloseButton = CloseButton
-    
-    MinimizeButton.MouseButton1Click:Connect(function()
-        selfWindow:Minimize()
-    end)
 
-    MaximizeButton.MouseButton1Click:Connect(function()
-        selfWindow:Maximize()
-    end)
+--------------------------------------------------------
+-- Window Buttons
+--------------------------------------------------------
 
-    CloseButton.MouseButton1Click:Connect(function()
-        selfWindow:Close()
-    end)
+MinimizeButton.MouseButton1Click:Connect(function()
+
+    selfWindow:ToggleMinimize()
+
+end)
+
+MaximizeButton.MouseButton1Click:Connect(function()
+
+    selfWindow:ToggleFullscreen()
+
+end)
+
+CloseButton.MouseButton1Click:Connect(function()
+
+    selfWindow:Close()
+
+end)
     
     --------------------------------------------------------
     local Title = Instance.new("TextLabel")
@@ -933,63 +943,199 @@ end
 ------------------------------------------------------------
 -- Window Control Methods
 ------------------------------------------------------------
+
+------------------------------------------------------------
+-- Minimize
+------------------------------------------------------------
+
 function Window:Minimize()
-    if not self.MainFrame or not self.TitleBar then return end
-    
-    self.IsMinimized = true
-    self.OriginalHeight = self.MainFrame.Size.Y.Offset
-    
-    for _, child in ipairs(self.MainFrame:GetChildren()) do
-        -- Пропускаем UICorner, UIListLayout и т.д.
-        if child:IsA("GuiObject") and child ~= self.TitleBar then
-            child.Visible = false
-        end
+
+    if not self.MainFrame or self.IsMinimized then
+
+        return
+
     end
-    
-    -- Уменьшаем высоту до заголовка
-    self.MainFrame.Size = UDim2.fromOffset(self.MainFrame.Size.X.Offset, 38)
+
+    self.IsMinimized = true
+
+    self.OriginalSize = self.MainFrame.Size
+
+    for _, Child in ipairs(self.MainFrame:GetChildren()) do
+
+        if Child:IsA("GuiObject") and Child ~= self.TitleBar then
+
+            Child.Visible = false
+
+        end
+
+    end
+
+    self.MainFrame.Size = UDim2.fromOffset(
+
+        self.MainFrame.Size.X.Offset,
+
+        self.TitleBar.AbsoluteSize.Y
+
+    )
+
 end
+
+------------------------------------------------------------
+-- Restore Window
+------------------------------------------------------------
 
 function Window:Maximize()
-    if not self.MainFrame then return end
-    
+
+    if not self.MainFrame or not self.IsMinimized then
+
+        return
+
+    end
+
     self.IsMinimized = false
-    
-    for _, child in ipairs(self.MainFrame:GetChildren()) do
-        if child:IsA("GuiObject") then
-            child.Visible = true
+
+    for _, Child in ipairs(self.MainFrame:GetChildren()) do
+
+        if Child:IsA("GuiObject") then
+
+            Child.Visible = true
+
         end
+
     end
-    
-    -- Возвращаем оригинальный размер
-    if self.OriginalHeight then
-        self.MainFrame.Size = UDim2.fromOffset(
-            self.MainFrame.Size.X.Offset, 
-            self.OriginalHeight
-        )
+
+    if self.OriginalSize then
+
+        self.MainFrame.Size = self.OriginalSize
+
     end
+
 end
 
-function Window:Close()
-    if self.Gui then
-        self.Gui:Destroy()
-        self.Gui = nil
-       self.MainFrame = nil
-       self.TitleBar = nil
-       self.Content = nil
-       self.TabPanel = nil
+------------------------------------------------------------
+-- Toggle Minimize
+------------------------------------------------------------
+
+function Window:ToggleMinimize()
+
+    if self.IsMinimized then
+
+        self:Maximize()
+
+    else
+
+        self:Minimize()
+
     end
-    
-    
-    -- Удаляем окно из списка
-    if self.Library and self.Library.Windows then
-        for i, win in ipairs(self.Library.Windows) do
-            if win == self then
-                table.remove(self.Library.Windows, i)
-                break
-            end
+
+end
+
+------------------------------------------------------------
+-- Toggle Fullscreen
+------------------------------------------------------------
+
+function Window:ToggleFullscreen()
+
+    if not self.MainFrame then
+
+        return
+
+    end
+
+    if not self.IsFullscreen then
+
+        self.PreviousSize = self.MainFrame.Size
+
+        self.PreviousPosition = self.MainFrame.Position
+
+        self.MainFrame.Position = UDim2.new(
+
+            0,
+
+            0,
+
+            0,
+
+            0
+
+        )
+
+        self.MainFrame.Size = UDim2.new(
+
+            1,
+
+            0,
+
+            1,
+
+            0
+
+        )
+
+    else
+
+        if self.PreviousPosition then
+
+            self.MainFrame.Position = self.PreviousPosition
+
         end
+
+        if self.PreviousSize then
+
+            self.MainFrame.Size = self.PreviousSize
+
+        end
+
     end
+
+    self.IsFullscreen = not self.IsFullscreen
+
+end
+
+------------------------------------------------------------
+-- Close
+------------------------------------------------------------
+
+function Window:Close()
+
+    if self.Gui then
+
+        self.Gui:Destroy()
+
+    end
+
+    self.Gui = nil
+
+    self.MainFrame = nil
+
+    self.TitleBar = nil
+
+    self.Content = nil
+
+    self.TabPanel = nil
+
+    if self.Library and self.Library.Windows then
+
+        for Index, WindowObject in ipairs(self.Library.Windows) do
+
+            if WindowObject == self then
+
+                table.remove(
+
+                    self.Library.Windows,
+
+                    Index
+
+                )
+
+                break
+
+            end
+
+        end
+
+    end
+
 end
 
 ------------------------------------------------------------
