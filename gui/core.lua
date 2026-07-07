@@ -743,7 +743,8 @@ local WidgetMethods = {
 
     "Separator",
 
-    "Keybind"
+    "Keybind",
+    "Image"
 
 }
 
