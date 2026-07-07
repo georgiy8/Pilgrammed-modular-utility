@@ -1,63 +1,27 @@
 --========================================================--
--- Phantom Lancer Visual Module
+-- Phantom Lancer Test Module
 --========================================================--
 
-local Players = game:GetService("Players")
-local Player = Players.LocalPlayer
-
 return function(Window)
-    --------------------------------------------------------
-    -- Tab
-    --------------------------------------------------------
     local Visual = Window:CreateTab({
-        Name = "Phantom Lancer",
-        Icon = "⚔️"
+        Name = "Phantom Test",
+        Icon = "🧪"
     })
     
-    --------------------------------------------------------
-    -- Images Section
-    --------------------------------------------------------
-    local Images = Visual:CreateSection({
-        Name = "Images"
+    local Section = Visual:CreateSection({
+        Name = "Test Image"
     })
     
-    --------------------------------------------------------
-    -- Main Image (PNG)
-    --------------------------------------------------------
-    local success, err = pcall(function()
-        Images:AddImage({
-            Image = getcustomasset("assets/phantom.png"),   -- ← PNG версия
-            Height = 220,
-            AspectRatio = 16/9,
-            BackgroundTransparency = 0,
-            BackgroundColor = Color3.fromRGB(25, 25, 25)
-        })
-    end)
+    -- Прямой тест
+    Section:AddLabel({ Text = "Testing getcustomasset..." })
     
-    if success then
-        Images:AddLabel({
-            Text = "✅ Phantom Lancer PNG loaded"
-        })
-    else
-        Images:AddLabel({
-            Text = "❌ Failed to load PNG"
-        })
-        Images:AddLabel({
-            Text = "Path: assets/phantom.png"
-        })
-        warn("Image Load Error:", err)
-    end
+    local TestImage = Instance.new("ImageLabel")
+    TestImage.Size = UDim2.new(1, -20, 0, 250)
+    TestImage.BackgroundTransparency = 0.5
+    TestImage.BackgroundColor3 = Color3.fromRGB(40,40,40)
+    TestImage.ScaleType = Enum.ScaleType.Fit
+    TestImage.Image = getcustomasset("assets/phantom.png")
+    TestImage.Parent = Section.Instance  -- или Section.Container если есть
     
-    --------------------------------------------------------
-    -- Info
-    --------------------------------------------------------
-    local Info = Visual:CreateSection({
-        Name = "Information"
-    })
-    
-    Info:AddLabel({ Text = "Current path: assets/phantom.png" })
-    Info:AddLabel({ Text = "Make sure the file is PNG format" })
-    
+    Section:AddLabel({ Text = "If you see the image above - success" })
 end
-
-
