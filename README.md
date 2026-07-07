@@ -22,17 +22,6 @@ A modular Roblox GUI library focused on simplicity, performance and easy customi
 
 ---
 
-# Installation
-
-```lua
-local Library = loadstring(game:HttpGet(
-    "YOUR_LINK_HERE"
-))()
-
-local GUI = Library.new()
-```
-
----
 
 # Creating a Window
 
