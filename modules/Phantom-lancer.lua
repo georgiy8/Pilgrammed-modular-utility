@@ -1,24 +1,99 @@
---========================================================--
--- Phantom Lancer Visual Module
---========================================================--
+local Module = {}
 
-return function(Window)
-    local Visual = Window:CreateTab({
-        Name = "Phantom Lancer",
-        Icon = "⚔️"
+Module.Name = "Phantom Lancer"
+Module.Version = "1.0"
+Module.Author = "Legend True"
+
+function Module:Load(UI)
+
+    local Section = UI:AddSection({
+        Name = "Phantom Lancer"
     })
-    
-    local Images = Visual:CreateSection({ Name = "Images" })
-    
-    -- Фейковый ID + getcustomasset
-    local fakeId = "rbxassetid://0"  -- фейк
-    local realAsset = getcustomasset("assets/phantom.png")
-    
-    Images:AddImage({
-        Image = realAsset or fakeId,
-        Height = 240,
+
+
+    -- Картинка модуля
+    Section:AddImage({
+
+        Image = getcustomasset("assets/phantom_lancer.png"),
+
+        Height = 180,
+
         AspectRatio = 16/9
+
     })
-    
-    Images:AddLabel({ Text = "Trying customasset + fallback" })
+
+
+    -- Описание
+    Section:AddLabel({
+        Text = "Phantom Lancer module"
+    })
+
+
+    -- Основной переключатель
+    Section:AddToggle({
+
+        Name = "Enable Phantom Lancer",
+
+        Default = false,
+
+        Callback = function(value)
+
+            Module.Enabled = value
+
+            if value then
+                print("[Phantom Lancer] Enabled")
+            else
+                print("[Phantom Lancer] Disabled")
+            end
+
+        end
+
+    })
+
+
+    -- Дополнительные настройки
+    Section:AddToggle({
+
+        Name = "Auto Mode",
+
+        Default = false,
+
+        Callback = function(value)
+
+            Module.AutoMode = value
+
+        end
+
+    })
+
+
+    Section:AddSlider({
+
+        Name = "Delay",
+
+        Min = 0,
+
+        Max = 100,
+
+        Default = 10,
+
+        Callback = function(value)
+
+            Module.Delay = value
+
+        end
+
+    })
+
+
 end
+
+
+function Module:Unload()
+
+    print("[Phantom Lancer] Unloaded")
+
+end
+
+
+return Module
