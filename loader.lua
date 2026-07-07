@@ -40,7 +40,8 @@ local Modules = {
     "fishing",
     "mining",
     "floating",
-    "settings"
+    "settings",
+    "Phantom-lancer"
 }
 
 for _, moduleName in ipairs(Modules) do
