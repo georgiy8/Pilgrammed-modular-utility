@@ -974,7 +974,12 @@ function Window:Close()
     if self.Gui then
         self.Gui:Destroy()
         self.Gui = nil
+       self.MainFrame = nil
+       self.TitleBar = nil
+       self.Content = nil
+       self.TabPanel = nil
     end
+    
     
     -- Удаляем окно из списка
     if self.Library and self.Library.Windows then
