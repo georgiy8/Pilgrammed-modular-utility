@@ -1,8 +1,8 @@
-#Pilgrammed GUI Library
+Pilgrammed GUI Library
 
-#Модульная GUI-библиотека для Roblox.
+Модульная GUI-библиотека для Roblox.
 
-#Структура проекта
+Структура проекта
 gui/
 
 ├── init.lua
@@ -24,7 +24,7 @@ gui/
     ├── textbox.lua
     ├── separator.lua
     └── keybind.lua
-#Подключение библиотеки
+Подключение библиотеки
 local Library = loadstring(game:HttpGet(...))()
 
 local GUI = Library.new()
@@ -35,7 +35,7 @@ local Window = GUI:CreateWindow({
 
 })
 
-#Доступные параметры
+Доступные параметры
 
 Title
 Width
@@ -52,7 +52,7 @@ local Window = GUI:CreateWindow({
     Height = 420
 
 })
-#Создание вкладки
+Создание вкладки
 local Main = Window:CreateTab({
 
     Name = "Main"
@@ -79,7 +79,7 @@ local Combat = Main:CreateSection({
 })
 Виджеты
 
-#Все виджеты добавляются только в Section.
+Все виджеты добавляются только в Section.
 
 Section:Add...
 Label
@@ -281,7 +281,7 @@ Window:ToggleFullscreen()
 
 gui/widgets/
 
-#Каждый файл должен возвращать таблицу
+Каждый файл должен возвращать таблицу
 
 local Widget = {}
 
