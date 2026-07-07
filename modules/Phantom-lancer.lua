@@ -1,27 +1,62 @@
 --========================================================--
--- Phantom Lancer Test Module
+-- Phantom Lancer Visual Module
 --========================================================--
 
 return function(Window)
+    --------------------------------------------------------
+    -- Tab
+    --------------------------------------------------------
     local Visual = Window:CreateTab({
-        Name = "Phantom Test",
-        Icon = "🧪"
+        Name = "Phantom Lancer",
+        Icon = "⚔️"
     })
     
-    local Section = Visual:CreateSection({
-        Name = "Test Image"
+    --------------------------------------------------------
+    -- Images Section
+    --------------------------------------------------------
+    local Images = Visual:CreateSection({
+        Name = "Images"
     })
     
-    -- Прямой тест
-    Section:AddLabel({ Text = "Testing getcustomasset..." })
+    --------------------------------------------------------
+    -- Preload & Show Image
+    --------------------------------------------------------
+    local AssetPath = "assets/phantom.png"
     
-    local TestImage = Instance.new("ImageLabel")
-    TestImage.Size = UDim2.new(1, -20, 0, 250)
-    TestImage.BackgroundTransparency = 0.5
-    TestImage.BackgroundColor3 = Color3.fromRGB(40,40,40)
-    TestImage.ScaleType = Enum.ScaleType.Fit
-    TestImage.Image = getcustomasset("assets/phantom.png")
-    TestImage.Parent = Section.Instance  -- или Section.Container если есть
+    local success, err = pcall(function()
+        local asset = getcustomasset(AssetPath)
+        
+        Images:AddImage({
+            Image = asset,
+            Height = 240,
+            AspectRatio = 16/9,
+            BackgroundTransparency = 0,
+            BackgroundColor = Color3.fromRGB(20, 20, 20)
+        })
+    end)
     
-    Section:AddLabel({ Text = "If you see the image above - success" })
+    if success then
+        Images:AddLabel({
+            Text = "✅ Phantom Lancer loaded successfully"
+        })
+    else
+        Images:AddLabel({
+            Text = "❌ Failed to load image"
+        })
+        Images:AddLabel({
+            Text = "Path: " .. AssetPath
+        })
+        warn("[Phantom Lancer] Asset Error:", err)
+    end
+    
+    --------------------------------------------------------
+    -- Info
+    --------------------------------------------------------
+    local Info = Visual:CreateSection({
+        Name = "Info"
+    })
+    
+    Info:AddLabel({ Text = "Make sure phantom.png is in assets folder" })
+    Info:AddLabel({ Text = "Use simple filename without spaces or special chars" })
+    
 end
