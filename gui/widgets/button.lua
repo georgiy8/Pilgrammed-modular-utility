@@ -5,6 +5,8 @@
 
 local Button = {}
 
+Button.__index = Button
+
 ------------------------------------------------------------
 -- Create Button
 ------------------------------------------------------------
@@ -13,115 +15,125 @@ function Button.Create(Parent, Settings)
 
     Settings = Settings or {}
 
+    local self = setmetatable({}, Button)
+
     local Text = Settings.Text or "Button"
 
-    local Callback = Settings.Callback or function()
+    self.Callback = Settings.Callback or function() end
 
-    end
+    local ButtonObject = Instance.new("TextButton")
 
-    --------------------------------------------------------
+    ButtonObject.Name = "Button"
 
-    local Object = {}
+    ButtonObject.Parent = Parent
 
-    --------------------------------------------------------
+    ButtonObject.Size = UDim2.new(1, -10, 0, 28)
 
-    local Instance = Instance.new("TextButton")
+    ButtonObject.BackgroundColor3 = Color3.fromRGB(60,60,60)
 
-    Instance.Parent = Parent
+    ButtonObject.BorderSizePixel = 0
 
-    Instance.Size = UDim2.new(1,0,0,30)
+    ButtonObject.Font = Enum.Font.Gotham
 
-    Instance.BackgroundColor3 = Color3.fromRGB(60,60,60)
+    ButtonObject.Text = Text
 
-    Instance.BorderSizePixel = 0
+    ButtonObject.TextSize = 14
 
-    Instance.AutoButtonColor = false
+    ButtonObject.TextColor3 = Color3.fromRGB(255,255,255)
 
-    Instance.Font = Enum.Font.Gotham
+    Instance.new("UICorner", ButtonObject).CornerRadius = UDim.new(0,4)
 
-    Instance.Text = Text
+    ButtonObject.MouseButton1Click:Connect(function()
 
-    Instance.TextColor3 = Color3.new(1,1,1)
-
-    Instance.TextSize = 14
-
-    Instance.ClipsDescendants = true
-
-    Instance.new("UICorner", Instance).CornerRadius = UDim.new(0,4)
-
-    --------------------------------------------------------
-    -- Hover
-    --------------------------------------------------------
-
-    Instance.MouseEnter:Connect(function()
-
-        Instance.BackgroundColor3 = Color3.fromRGB(72,72,72)
+        self.Callback()
 
     end)
 
-    Instance.MouseLeave:Connect(function()
+    self.Instance = ButtonObject
 
-        Instance.BackgroundColor3 = Color3.fromRGB(60,60,60)
+    return self
 
-    end)
+end
 
-    --------------------------------------------------------
-    -- Click
-    --------------------------------------------------------
+------------------------------------------------------------
+-- Set Text
+------------------------------------------------------------
 
-    Instance.MouseButton1Click:Connect(function()
+function Button:SetText(Text)
 
-        local Success, Error = pcall(Callback)
+    self.Instance.Text = Text
 
-        if not Success then
+end
 
-            warn("[Button] ".. tostring(Error))
+------------------------------------------------------------
+-- Get Text
+------------------------------------------------------------
 
-        end
+function Button:GetText()
 
-    end)
+    return self.Instance.Text
 
-    --------------------------------------------------------
+end
 
-    Object.Instance = Instance
+------------------------------------------------------------
+-- Set Callback
+------------------------------------------------------------
 
-    ------------------------------------------------------------
-    -- API
-    ------------------------------------------------------------
+function Button:SetCallback(Callback)
 
-    function Object:SetText(NewText)
+    self.Callback = Callback or function() end
 
-        Instance.Text = NewText
+end
 
-    end
+------------------------------------------------------------
+-- Fire
+------------------------------------------------------------
 
-    function Object:GetText()
+function Button:Fire()
 
-        return Instance.Text
+    self.Callback()
 
-    end
+end
 
-    function Object:SetCallback(NewCallback)
+------------------------------------------------------------
+-- Set Color
+------------------------------------------------------------
 
-        Callback = NewCallback
+function Button:SetColor(Color)
 
-    end
+    self.Instance.BackgroundColor3 = Color
 
-    function Object:SetVisible(State)
+end
 
-        Instance.Visible = State
+------------------------------------------------------------
+-- Set Visible
+------------------------------------------------------------
 
-    end
+function Button:SetVisible(State)
 
-    function Object:Destroy()
+    self.Instance.Visible = State
 
-        Instance:Destroy()
+end
 
-    end
+------------------------------------------------------------
+-- Set Enabled
+------------------------------------------------------------
 
-    --------------------------------------------------------
+function Button:SetEnabled(State)
 
-    return Object
+    self.Instance.Active = State
+
+    self.Instance.AutoButtonColor = State
+
+end
+
+------------------------------------------------------------
+-- Destroy
+------------------------------------------------------------
+
+function Button:Destroy()
+
+    self.Instance:Destroy()
 
 end
 
