@@ -12,7 +12,12 @@ return function(Window)
         Name = "Preview"
     })
     
-    local path = "assets/phantom.png"
+    print("PATH:", path)
+
+local asset = getcustomasset(path)
+
+print("ASSET:", asset)
+print("TYPE:", typeof(asset))
     
     local asset = getcustomasset(path)
     
