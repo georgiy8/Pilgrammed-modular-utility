@@ -1,5 +1,5 @@
 --========================================================--
--- Phantom Lancer Module (Working version)
+-- Phantom Lancer Module
 --========================================================--
 
 return function(Window)
@@ -12,26 +12,23 @@ return function(Window)
         Name = "Preview"
     })
     
-    local ImageUrl = "https://raw.githubusercontent.com/georgiy8/Pilgrammed-modular-utility/main/assets/phantom.png"
+    local url = "https://raw.githubusercontent.com/georgiy8/Pilgrammed-modular-utility/main/assets/phantom.png"
     
-    -- Рабочий способ
-    local success, imageData = pcall(function()
-        return game:HttpGet(ImageUrl)
+    local success, result = pcall(function()
+        return getcustomasset(url)  -- как ты просил
     end)
     
     if success then
-        -- Создаём ImageLabel напрямую
-        local ImageLabel = Instance.new("ImageLabel")
-        ImageLabel.Size = UDim2.new(1, -20, 0, 320)
-        ImageLabel.BackgroundTransparency = 1
-        ImageLabel.ScaleType = Enum.ScaleType.Fit
-        ImageLabel.Image = ImageUrl  -- или используем data если нужно
-        ImageLabel.Parent = Preview.Container or Preview.Instance
-        
-        Instance.new("UICorner", ImageLabel).CornerRadius = UDim.new(0, 8)
-        
-        Preview:AddLabel({ Text = "✅ Image loaded via HttpGet" })
+        Preview:AddImage({
+            Image = result,
+            Height = 320,
+            AspectRatio = 16/9
+        })
     else
-        Preview:AddLabel({ Text = "❌ HttpGet failed" })
+        Preview:AddImage({
+            Image = url,
+            Height = 320,
+            AspectRatio = 16/9
+        })
     end
 end
