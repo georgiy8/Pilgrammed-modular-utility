@@ -22,26 +22,33 @@ return function(Window)
     })
     
     --------------------------------------------------------
-    -- Main Image
+    -- Main Phantom Lancer Image
     --------------------------------------------------------
     Images:AddImage({
         Image = getcustomasset("assets/Phantom-lancer/Images/phantom_lancer_pl.jpg"),
         Height = 220,
-        AspectRatio = 16/9
+        AspectRatio = 16/9,
+        BackgroundTransparency = 0,
+        BackgroundColor = Color3.fromRGB(25, 25, 25)
     })
     
     --------------------------------------------------------
-    -- Info
+    -- Info Section
     --------------------------------------------------------
     local Info = Visual:CreateSection({
         Name = "Information"
     })
     
     Info:AddLabel({
-        Text = "Phantom Lancer Skin Preview"
+        Text = "👤 Phantom Lancer Preview"
     })
     
     Info:AddLabel({
-        Text = "✅ Loaded successfully"
+        Text = "✅ Asset loaded from customassets"
     })
+    
+    Info:AddLabel({
+        Text = "Path: assets/Phantom-lancer/Images/phantom_lancer_pl.jpg"
+    })
+    
 end
