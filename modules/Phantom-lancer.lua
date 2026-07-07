@@ -1,5 +1,5 @@
 --========================================================--
--- Phantom Lancer Module
+-- Phantom Lancer Module (Debug)
 --========================================================--
 
 return function(Window)
@@ -12,24 +12,21 @@ return function(Window)
         Name = "Preview"
     })
     
-    local url = "https://raw.githubusercontent.com/georgiy8/Pilgrammed-modular-utility/main/assets/phantom.png"
+    local path = "assets/phantom.png"
     
-    local success, result = pcall(function()
-        return getcustomasset(url)  -- как ты просил
-    end)
+    local asset = getcustomasset(path)
     
-    if success then
-        Preview:AddImage({
-            Image = result,
-            Height = 320,
-            AspectRatio = 16/9
-        })
-    else
-        Preview:AddImage({
-            Image = url,
-            Height = 320,
-            AspectRatio = 16/9
-        })
-    end
+    -- Прямое создание
+    local ImageLabel = Instance.new("ImageLabel")
+    ImageLabel.Name = "PhantomImage"
+    ImageLabel.Size = UDim2.new(1, -20, 0, 320)
+    ImageLabel.BackgroundTransparency = 1
+    ImageLabel.ScaleType = Enum.ScaleType.Fit
+    ImageLabel.Image = asset
+    ImageLabel.Parent = Preview.Container or Preview.Instance  -- Важно!
+    
+    Instance.new("UICorner", ImageLabel).CornerRadius = UDim.new(0, 8)
+    
+    Preview:AddLabel({ Text = "Прямая ImageLabel" })
+    Preview:AddLabel({ Text = "Asset: " .. tostring(asset) })
 end
-
