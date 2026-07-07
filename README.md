@@ -1,8 +1,350 @@
-Pilgrammed GUI Library
+# Pilgrammed GUI Library
 
-Модульная GUI-библиотека для Roblox.
+A modular Roblox GUI library focused on simplicity, performance and easy customization.
 
-Структура проекта
+---
+
+# Features
+
+- Modular architecture
+- Lightweight
+- Easy to extend
+- Draggable window
+- Resizable window
+- Minimize / Restore
+- Fullscreen mode
+- Close button
+- Tabs
+- Sections
+- Widget Registry
+- Theme support
+- Clean API
+
+---
+
+# Installation
+
+```lua
+local Library = loadstring(game:HttpGet(
+    "YOUR_LINK_HERE"
+))()
+
+local GUI = Library.new()
+```
+
+---
+
+# Creating a Window
+
+```lua
+local Window = GUI:CreateWindow({
+
+    Title = "Pilgrammed Utility",
+
+    Width = 650,
+
+    Height = 420
+
+})
+```
+
+| Property | Description |
+|----------|-------------|
+| Title | Window title |
+| Width | Window width |
+| Height | Window height |
+
+---
+
+# Creating Tabs
+
+```lua
+local Main = Window:CreateTab({
+
+    Name = "Main"
+
+})
+```
+
+```lua
+local Visual = Window:CreateTab({
+
+    Name = "Visual"
+
+})
+```
+
+---
+
+# Creating Sections
+
+```lua
+local Combat = Main:CreateSection({
+
+    Name = "Combat"
+
+})
+```
+
+Every widget is created inside a Section.
+
+---
+
+# Widgets
+
+## Label
+
+```lua
+Combat:AddLabel({
+
+    Text = "Hello World"
+
+})
+```
+
+---
+
+## Button
+
+```lua
+Combat:AddButton({
+
+    Text = "Click Me",
+
+    Callback = function()
+
+        print("Clicked")
+
+    end
+
+})
+```
+
+---
+
+## Toggle
+
+```lua
+Combat:AddToggle({
+
+    Text = "Enabled",
+
+    Default = false,
+
+    Callback = function(State)
+
+        print(State)
+
+    end
+
+})
+```
+
+---
+
+## Slider
+
+```lua
+Combat:AddSlider({
+
+    Text = "WalkSpeed",
+
+    Min = 0,
+
+    Max = 100,
+
+    Default = 16,
+
+    Increment = 1,
+
+    Callback = function(Value)
+
+        print(Value)
+
+    end
+
+})
+```
+
+---
+
+## Dropdown
+
+```lua
+Combat:AddDropdown({
+
+    Text = "Mode",
+
+    Values = {
+
+        "Normal",
+
+        "Fast",
+
+        "Ultra"
+
+    },
+
+    Default = "Normal",
+
+    Callback = function(Value)
+
+        print(Value)
+
+    end
+
+})
+```
+
+---
+
+## Textbox
+
+```lua
+Combat:AddTextbox({
+
+    Text = "Username",
+
+    Placeholder = "Player",
+
+    Callback = function(Text)
+
+        print(Text)
+
+    end
+
+})
+```
+
+---
+
+## Separator
+
+```lua
+Combat:AddSeparator({
+
+    Text = "Advanced"
+
+})
+```
+
+---
+
+## Keybind
+
+```lua
+Combat:AddKeybind({
+
+    Text = "Open GUI",
+
+    Default = Enum.KeyCode.RightShift,
+
+    Callback = function(Key)
+
+        print(Key.Name)
+
+    end
+
+})
+```
+
+---
+
+# Window API
+
+## Show
+
+```lua
+Window:Show()
+```
+
+Shows the window.
+
+---
+
+## Hide
+
+```lua
+Window:Hide()
+```
+
+Hides the window.
+
+---
+
+## Set Title
+
+```lua
+Window:SetTitle("New Title")
+```
+
+Changes the window title.
+
+---
+
+## Set Size
+
+```lua
+Window:SetSize(700,500)
+```
+
+Changes the window size.
+
+---
+
+## Minimize
+
+```lua
+Window:Minimize()
+```
+
+Minimizes the window.
+
+---
+
+## Restore
+
+```lua
+Window:Maximize()
+```
+
+Restores the minimized window.
+
+---
+
+## Toggle Minimize
+
+```lua
+Window:ToggleMinimize()
+```
+
+Switches between minimized and restored state.
+
+---
+
+## Fullscreen
+
+```lua
+Window:ToggleFullscreen()
+```
+
+Enters or exits fullscreen mode.
+
+---
+
+## Close
+
+```lua
+Window:Close()
+```
+
+Destroys the window.
+
+---
+
+# Folder Structure
+
+```
 gui/
 
 ├── init.lua
@@ -15,7 +357,6 @@ gui/
 
 └── widgets/
     ├── registry.lua
-    ├── section.lua
     ├── label.lua
     ├── button.lua
     ├── toggle.lua
@@ -24,265 +365,21 @@ gui/
     ├── textbox.lua
     ├── separator.lua
     └── keybind.lua
-Подключение библиотеки
-local Library = loadstring(game:HttpGet(...))()
+```
 
-local GUI = Library.new()
-Создание окна
-local Window = GUI:CreateWindow({
+---
 
-    Title = "Pilgrammed Utility"
+# Creating Custom Widgets
 
-})
+Every widget is located inside
 
-Доступные параметры
-
-Title
-Width
-Height
-
-Пример
-
-local Window = GUI:CreateWindow({
-
-    Title = "Pilgrammed Utility",
-
-    Width = 650,
-
-    Height = 420
-
-})
-Создание вкладки
-local Main = Window:CreateTab({
-
-    Name = "Main"
-
-})
-
-или
-
-local Combat = Window:CreateTab({
-
-    Name = "Combat"
-
-})
-
-Параметры
-
-Name
-Icon (будет использоваться позже)
-Создание секции
-local Combat = Main:CreateSection({
-
-    Name = "Combat"
-
-})
-Виджеты
-
-Все виджеты добавляются только в Section.
-
-Section:Add...
-Label
-Combat:AddLabel({
-
-    Text = "Pilgrammed Utility"
-
-})
-
-Параметры
-
-Text
-Button
-Combat:AddButton({
-
-    Text = "Kill Aura",
-
-    Callback = function()
-
-        print("Clicked")
-
-    end
-
-})
-
-Параметры
-
-Text
-Callback
-Toggle
-Combat:AddToggle({
-
-    Text = "Kill Aura",
-
-    Default = false,
-
-    Callback = function(State)
-
-    end
-
-})
-
-Параметры
-
-Text
-Default
-Callback
-
-Callback получает
-
-true
-
-или
-
-false
-Slider
-Combat:AddSlider({
-
-    Text = "Range",
-
-    Min = 0,
-
-    Max = 100,
-
-    Default = 25,
-
-    Increment = 1,
-
-    Callback = function(Value)
-
-    end
-
-})
-
-Параметры
-
-Text
-Min
-Max
-Default
-Increment
-Callback
-Dropdown
-Combat:AddDropdown({
-
-    Text = "Target",
-
-    Values = {
-
-        "Head",
-
-        "Torso",
-
-        "Root"
-
-    },
-
-    Default = "Head",
-
-    Callback = function(Value)
-
-    end
-
-})
-
-Параметры
-
-Text
-Values
-Default
-Callback
-Textbox
-Combat:AddTextbox({
-
-    Text = "Player",
-
-    Placeholder = "Username",
-
-    Callback = function(Text)
-
-    end
-
-})
-
-Параметры
-
-Text
-Placeholder
-Default
-Callback
-Separator
-Combat:AddSeparator({
-
-    Text = "Visual"
-
-})
-
-или
-
-Combat:AddSeparator()
-Keybind
-Combat:AddKeybind({
-
-    Text = "Open GUI",
-
-    Default = Enum.KeyCode.RightShift,
-
-    Callback = function()
-
-    end
-
-})
-
-Параметры
-
-Text
-Default
-Callback
-Window API
-
-Скрыть окно
-
-Window:Hide()
-
-Показать окно
-
-Window:Show()
-
-Изменить заголовок
-
-Window:SetTitle("Pilgrammed Utility")
-
-Изменить размер
-
-Window:SetSize(700,500)
-
-Закрыть окно
-
-Window:Close()
-
-Свернуть
-
-Window:Minimize()
-
-Развернуть
-
-Window:Maximize()
-
-Переключить сворачивание
-
-Window:ToggleMinimize()
-
-Полноэкранный режим
-
-Window:ToggleFullscreen()
-Создание собственного виджета
-
-Любой виджет находится в
-
+```
 gui/widgets/
+```
 
-Каждый файл должен возвращать таблицу
+Each widget must return a table.
 
+```lua
 local Widget = {}
 
 function Widget.Create(Parent, Settings)
@@ -292,17 +389,23 @@ function Widget.Create(Parent, Settings)
 end
 
 return Widget
+```
 
-После создания файла зарегистрируйте его в
+Register the widget inside
 
+```lua
 gui/widgets/registry.lua
+```
 
-Например
+Example:
 
+```lua
 Widgets.ColorPicker = Import("gui/widgets/colorpicker.lua")
+```
 
-Затем добавьте его в core.lua:
+Now register it inside **core.lua**
 
+```lua
 local WidgetMethods = {
 
     ...
@@ -310,14 +413,22 @@ local WidgetMethods = {
     "ColorPicker"
 
 }
+```
 
-После этого он станет доступен как
+Your widget will automatically become available as
 
+```lua
 Section:AddColorPicker({
 
 })
-Полный пример
-local Library = loadstring(game:HttpGet(...))()
+```
+
+---
+
+# Example
+
+```lua
+local Library = loadstring(game:HttpGet("YOUR_LINK"))()
 
 local GUI = Library.new()
 
@@ -347,11 +458,11 @@ Combat:AddLabel({
 
 Combat:AddButton({
 
-    Text = "Click",
+    Text = "Button",
 
     Callback = function()
 
-        print("Hello")
+        print("Clicked")
 
     end
 
@@ -359,7 +470,7 @@ Combat:AddButton({
 
 Combat:AddToggle({
 
-    Text = "Enabled",
+    Text = "Toggle",
 
     Default = false
 
@@ -367,7 +478,7 @@ Combat:AddToggle({
 
 Combat:AddSlider({
 
-    Text = "Range",
+    Text = "Slider",
 
     Min = 0,
 
@@ -379,7 +490,7 @@ Combat:AddSlider({
 
 Combat:AddDropdown({
 
-    Text = "Mode",
+    Text = "Dropdown",
 
     Values = {
 
@@ -395,7 +506,7 @@ Combat:AddDropdown({
 
 Combat:AddTextbox({
 
-    Text = "Player"
+    Text = "Textbox"
 
 })
 
@@ -407,8 +518,17 @@ Combat:AddSeparator({
 
 Combat:AddKeybind({
 
-    Text = "Open",
+    Text = "Keybind",
 
     Default = Enum.KeyCode.RightShift
 
 })
+```
+
+---
+
+# License
+
+This project is open-source.
+
+Feel free to modify, improve and contribute.
