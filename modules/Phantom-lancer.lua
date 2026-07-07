@@ -1,99 +1,36 @@
-local Module = {}
+--========================================================--
+-- Phantom Lancer Module
+--========================================================--
 
-Module.Name = "Phantom Lancer"
-Module.Version = "1.0"
-Module.Author = "Legend True"
+return function(Window)
 
-function Module:Load(UI)
+    --------------------------------------------------------
+    -- Tab
+    --------------------------------------------------------
 
-    local Section = UI:AddSection({
+    local Phantom = Window:CreateTab({
+
         Name = "Phantom Lancer"
-    })
-
-
-    -- Картинка модуля
-    Section:AddImage({
-
-        Image = getcustomasset("assets/phantom_lancer.png"),
-
-        Height = 180,
-
-        AspectRatio = 16/9
 
     })
 
+    --------------------------------------------------------
+    -- Image Section
+    --------------------------------------------------------
 
-    -- Описание
-    Section:AddLabel({
-        Text = "Phantom Lancer module"
-    })
+    local ImageSection = Phantom:CreateSection({
 
-
-    -- Основной переключатель
-    Section:AddToggle({
-
-        Name = "Enable Phantom Lancer",
-
-        Default = false,
-
-        Callback = function(value)
-
-            Module.Enabled = value
-
-            if value then
-                print("[Phantom Lancer] Enabled")
-            else
-                print("[Phantom Lancer] Disabled")
-            end
-
-        end
+        Name = "Phantom Lancer"
 
     })
 
 
-    -- Дополнительные настройки
-    Section:AddToggle({
+    ImageSection:AddImage({
 
-        Name = "Auto Mode",
+        Image = "assets/phantom.png",
 
-        Default = false,
-
-        Callback = function(value)
-
-            Module.AutoMode = value
-
-        end
+        AspectRatio = 1
 
     })
-
-
-    Section:AddSlider({
-
-        Name = "Delay",
-
-        Min = 0,
-
-        Max = 100,
-
-        Default = 10,
-
-        Callback = function(value)
-
-            Module.Delay = value
-
-        end
-
-    })
-
 
 end
-
-
-function Module:Unload()
-
-    print("[Phantom Lancer] Unloaded")
-
-end
-
-
-return Module
