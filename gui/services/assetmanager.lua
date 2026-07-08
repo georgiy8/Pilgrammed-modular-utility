@@ -37,15 +37,14 @@ function AssetManager:Download(Url, LocalPath)
         warn("[AssetManager] Download failed:", LocalPath)
         return false
     end
-    local Dir = LocalPath:match("(.*/)")
-    if Dir then makefolder(Dir) end
+local Dir = LocalPath:match("(.*/)")
+
+if Dir and not isfolder(Dir) then
+    makefolder(Dir)
+end
     local WriteSuccess = pcall(function()
         writefile(LocalPath, Data)
-            if isfile(LocalPath) then
-    print("[AssetManager] Saved:", LocalPath)
-else
-    warn("[AssetManager] Failed:", LocalPath)
-end
+        
     end)
     if WriteSuccess then
           self.Downloaded = self.Downloaded + 1
@@ -92,19 +91,29 @@ elseif item.type == "dir" then
     self:ScanFolder(NewGithubPath, NewLocalPath)
 
 end
+end
 
 ------------------------------------------------------------
 -- Init
 ------------------------------------------------------------
-print(string.format(
+function AssetManager:Init()
 
-    "[AssetManager] Finished. Verified: %d | Downloaded: %d",
+    self.Downloaded = 0
+    self.Verified = 0
 
-    self.Verified,
+    self:CreateFolder()
 
-    self.Downloaded
+    print("[AssetManager] Starting recursive scan...")
 
-))
+    self:ScanFolder("assets", "assets")
+
+    print(string.format(
+        "[AssetManager] Finished. Verified: %d | Downloaded: %d",
+        self.Verified,
+        self.Downloaded
+    ))
+
+end
 ------------------------------------------------------------
 -- Get Asset
 ------------------------------------------------------------
