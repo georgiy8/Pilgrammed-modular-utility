@@ -35,8 +35,9 @@ function AssetManager:Download(Url, LocalPath)
         warn("[AssetManager] Download failed:", LocalPath)
         return false
     end
-    local Dir = LocalPath:match("(.*/)")
-    if Dir then makefolder(Dir) end
+    if Dir and not isfolder(Dir) then
+    makefolder(Dir)
+    end
     local WriteSuccess = pcall(function()
         writefile(LocalPath, Data)
     end)
