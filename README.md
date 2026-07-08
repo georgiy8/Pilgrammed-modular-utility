@@ -1,421 +1,402 @@
-# Pilgrammed GUI Library
+# Pilgrammed Modular Utility
 
-A modular Roblox GUI library focused on simplicity, performance and easy customization.
-
----
-
-# Features
-
-- Modular architecture
-- Lightweight
-- Easy to extend
-- Draggable window
-- Resizable window
-- Minimize / Restore
-- Fullscreen mode
-- Close button
-- Tabs
-- Sections
-- Widget Registry
-- Theme support
-- Clean API
+A modular Roblox GUI library built for executor environments.
 
 ---
 
-
-# Creating a Window
+# Create Window
 
 ```lua
 local Window = GUI:CreateWindow({
-
     Title = "Pilgrammed Utility",
-
     Width = 650,
-
     Height = 420
-
 })
 ```
 
-| Property | Description |
-|----------|-------------|
-| Title | Window title |
-| Width | Window width |
-| Height | Window height |
+| Option | Type | Default |
+|---------|------|----------|
+| Title | string | "Pilgrammed Utility" |
+| Width | number | 650 |
+| Height | number | 420 |
 
 ---
 
-# Creating Tabs
+# Create Tab
 
 ```lua
 local Main = Window:CreateTab({
-
-    Name = "Main"
-
+    Name = "Main",
+    Icon = "🏠"
 })
 ```
 
-```lua
-local Visual = Window:CreateTab({
-
-    Name = "Visual"
-
-})
-```
+| Option | Type |
+|---------|------|
+| Name | string |
+| Icon | string |
 
 ---
 
-# Creating Sections
+# Create Section
 
 ```lua
-local Combat = Main:CreateSection({
-
-    Name = "Combat"
-
+local General = Main:CreateSection({
+    Name = "General"
 })
 ```
 
-Every widget is created inside a Section.
+| Option | Type |
+|---------|------|
+| Name | string |
 
 ---
 
-# Widgets
+# Label
 
-## Label
+Displays text.
 
 ```lua
-Combat:AddLabel({
-
+General:AddLabel({
     Text = "Hello World"
-
 })
 ```
 
+Options
+
+| Name | Type | Default |
+|------|------|----------|
+| Text | string | "Label" |
+
 ---
 
-## Button
+# Button
+
+Creates a clickable button.
 
 ```lua
-Combat:AddButton({
-
-    Text = "Click Me",
-
+General:AddButton({
+    Text = "Print",
     Callback = function()
-
-        print("Clicked")
-
+        print("Hello")
     end
-
 })
 ```
 
+Options
+
+| Name | Type |
+|------|------|
+| Text | string |
+| Callback | function |
+
 ---
 
-## Toggle
+# Toggle
+
+Creates an ON/OFF switch.
 
 ```lua
-Combat:AddToggle({
-
-    Text = "Enabled",
-
+General:AddToggle({
+    Text = "God Mode",
     Default = false,
-
-    Callback = function(State)
-
-        print(State)
-
+    Callback = function(Value)
+        print(Value)
     end
-
 })
 ```
 
+Options
+
+| Name | Type |
+|------|------|
+| Text | string |
+| Default | boolean |
+| Callback | function |
+
 ---
 
-## Slider
+# Slider
+
+Numeric slider.
 
 ```lua
-Combat:AddSlider({
-
+General:AddSlider({
     Text = "WalkSpeed",
-
     Min = 0,
-
     Max = 100,
-
     Default = 16,
-
-    Increment = 1,
-
     Callback = function(Value)
-
         print(Value)
-
     end
-
 })
 ```
 
+Options
+
+| Name | Type |
+|------|------|
+| Text | string |
+| Min | number |
+| Max | number |
+| Default | number |
+| Callback | function |
+
 ---
 
-## Dropdown
+# Dropdown
+
+Selection list.
 
 ```lua
-Combat:AddDropdown({
-
-    Text = "Mode",
-
-    Values = {
-
-        "Normal",
-
-        "Fast",
-
-        "Ultra"
-
+General:AddDropdown({
+    Text = "Weapon",
+    Options = {
+        "Sword",
+        "Bow",
+        "Gun"
     },
-
-    Default = "Normal",
-
     Callback = function(Value)
-
         print(Value)
-
     end
-
 })
 ```
 
+Options
+
+| Name | Type |
+|------|------|
+| Text | string |
+| Options | table |
+| Callback | function |
+
 ---
 
-## Textbox
+# Textbox
+
+Text input.
 
 ```lua
-Combat:AddTextbox({
-
-    Text = "Username",
-
-    Placeholder = "Player",
-
+General:AddTextbox({
+    Placeholder = "Type here...",
     Callback = function(Text)
-
         print(Text)
-
     end
-
 })
 ```
 
----
+Options
 
-## Separator
-
-```lua
-Combat:AddSeparator({
-
-    Text = "Advanced"
-
-})
-```
+| Name | Type |
+|------|------|
+| Placeholder | string |
+| Callback | function |
 
 ---
 
-## Keybind
+# Keybind
+
+Keyboard shortcut.
 
 ```lua
-Combat:AddKeybind({
-
-    Text = "Open GUI",
-
-    Default = Enum.KeyCode.RightShift,
-
-    Callback = function(Key)
-
-        print(Key.Name)
-
+General:AddKeybind({
+    Text = "Fly",
+    Default = Enum.KeyCode.F,
+    Callback = function()
+        print("Pressed")
     end
-
 })
 ```
 
----
+Options
 
-# Window API
-
-## Show
-
-```lua
-Window:Show()
-```
-
-Shows the window.
+| Name | Type |
+|------|------|
+| Text | string |
+| Default | Enum.KeyCode |
+| Callback | function |
 
 ---
 
-## Hide
+# Separator
+
+Horizontal separator.
 
 ```lua
-Window:Hide()
+General:AddSeparator()
 ```
 
-Hides the window.
+No settings required.
 
 ---
 
-## Set Title
+# Image
+
+Displays an image.
+
+Using getcustomasset:
 
 ```lua
-Window:SetTitle("New Title")
+General:AddImage({
+    Image = getcustomasset("assets/logo.png"),
+    Height = 220
+})
 ```
 
-Changes the window title.
+Options
+
+| Name | Type | Default |
+|------|------|----------|
+| Image | string | "" |
+| Height | number | 160 |
+| ScaleType | Enum.ScaleType | Fit |
+| Transparency | number | 0 |
+| BackgroundTransparency | number | 1 |
+| BackgroundColor | Color3 | White |
 
 ---
 
-## Set Size
+# Widget Methods
 
-```lua
-Window:SetSize(700,500)
-```
-
-Changes the window size.
-
----
-
-## Minimize
-
-```lua
-Window:Minimize()
-```
-
-Minimizes the window.
-
----
-
-## Restore
-
-```lua
-Window:Maximize()
-```
-
-Restores the minimized window.
-
----
-
-## Toggle Minimize
-
-```lua
-Window:ToggleMinimize()
-```
-
-Switches between minimized and restored state.
-
----
-
-## Fullscreen
-
-```lua
-Window:ToggleFullscreen()
-```
-
-Enters or exits fullscreen mode.
-
----
-
-## Close
-
-```lua
-Window:Close()
-```
-
-Destroys the window.
-
----
-
-# Folder Structure
-
-```
-gui/
-
-├── init.lua
-├── core.lua
-├── theme.lua
-
-├── services/
-│   ├── drag.lua
-│   └── resize.lua
-
-└── widgets/
-    ├── registry.lua
-    ├── label.lua
-    ├── button.lua
-    ├── toggle.lua
-    ├── slider.lua
-    ├── dropdown.lua
-    ├── textbox.lua
-    ├── separator.lua
-    └── keybind.lua
-```
-
----
-
-# Creating Custom Widgets
-
-Every widget is located inside
-
-```
-gui/widgets/
-```
-
-Each widget must return a table.
-
-```lua
-local Widget = {}
-
-function Widget.Create(Parent, Settings)
-
-    ...
-
-end
-
-return Widget
-```
-
-Register the widget inside
-
-```lua
-gui/widgets/registry.lua
-```
+Every widget returns an object.
 
 Example:
 
 ```lua
-Widgets.ColorPicker = Import("gui/widgets/colorpicker.lua")
-```
-
-Now register it inside **core.lua**
-
-```lua
-local WidgetMethods = {
-
-    ...
-
-    "ColorPicker"
-
-}
-```
-
-Your widget will automatically become available as
-
-```lua
-Section:AddColorPicker({
-
+local Label = General:AddLabel({
+    Text = "Loading..."
 })
+
+Label:SetText("Finished")
+```
+
+Image example:
+
+```lua
+local Image = General:AddImage({
+    Image = getcustomasset("assets/logo.png")
+})
+
+Image:SetImage(getcustomasset("assets/banner.png"))
+
+Image:SetHeight(300)
+
+Image:SetVisible(false)
 ```
 
 ---
 
-# License
+# Window Methods
 
-This project is open-source.
+```lua
+Window:SetTitle("New Title")
 
-Feel free to modify, improve and contribute.
+Window:SetSize(800,500)
+
+Window:Show()
+
+Window:Hide()
+
+Window:ToggleMinimize()
+
+Window:ToggleFullscreen()
+
+Window:Close()
+
+Window:Destroy()
+```
+
+---
+
+# Tab Methods
+
+```lua
+Tab:Select()
+
+Tab:Destroy()
+
+Tab:GetSection("General")
+```
+
+---
+
+# Section Methods
+
+```lua
+Section:Clear()
+
+Section:Destroy()
+```
+
+---
+
+# Assets
+
+Potassium supports custom assets.
+
+Place files inside:
+
+```
+assets/
+```
+
+Example:
+
+```
+assets/
+├── logo.png
+├── banner.png
+├── click.mp3
+└── open.wav
+```
+
+Image:
+
+```lua
+General:AddImage({
+    Image = getcustomasset("assets/logo.png")
+})
+```
+
+Sound:
+
+```lua
+local Sound = Instance.new("Sound")
+Sound.SoundId = getcustomasset("assets/click.mp3")
+Sound:Play()
+```
+
+---
+
+# Project Structure
+
+```
+gui/
+    core.lua
+    init.lua
+
+    widgets/
+        label.lua
+        button.lua
+        toggle.lua
+        slider.lua
+        dropdown.lua
+        textbox.lua
+        keybind.lua
+        separator.lua
+        image.lua
+
+    services/
+        drag.lua
+        resize.lua
+
+modules/
+    main.lua
+    fishing.lua
+    mining.lua
+
+assets/
+    logo.png
+    banner.png
+    click.mp3
+```
