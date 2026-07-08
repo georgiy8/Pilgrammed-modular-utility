@@ -1,35 +1,56 @@
 --========================================================--
--- Phantom Lancer Module
+-- Asset Test Module
 --========================================================--
 
 return function(Window)
 
+    local Assets = Window.Library.AssetManager
+
     local Tab = Window:CreateTab({
-        Name = "Phantom Lancer",
-        Icon = "⚔️"
+        Name = "Asset Test",
+        Icon = "🖼️"
     })
 
-    local Preview = Tab:CreateSection({
-        Name = "Preview"
+    local Section = Tab:CreateSection({
+        Name = "PNG Test"
     })
 
-    Preview:AddImage({
+    --------------------------------------------------------
+    -- Получаем Custom Asset
+    --------------------------------------------------------
 
-        Image = "https://raw.githubusercontent.com/georgiy8/Pilgrammed-modular-utility/main/assets/phantom.png",
+    local Asset = Assets:Get("phantom.png")
 
-        Height = 320,
-
-        ScaleType = Enum.ScaleType.Fit
-
+    Section:AddLabel({
+        Text = "Asset: " .. tostring(Asset)
     })
 
-    Preview:AddSeparator()
+    --------------------------------------------------------
+    -- Проверяем
+    --------------------------------------------------------
 
-    Preview:AddLabel({
+    if Asset then
 
-        Text = "Testing image from GitHub..."
+        Section:AddLabel({
+            Text = "✅ Asset loaded successfully"
+        })
 
-    })
+        Section:AddImage({
+
+            Image = Asset,
+
+            Height = 320,
+
+            ScaleType = Enum.ScaleType.Fit
+
+        })
+
+    else
+
+        Section:AddLabel({
+            Text = "❌ Failed to load asset"
+        })
+
+    end
 
 end
-
