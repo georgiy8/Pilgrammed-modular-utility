@@ -1,5 +1,6 @@
 --========================================================--
--- Pilgrammed Asset Manager
+-- Pilgrammed GUI Library
+-- Asset Manager
 --========================================================--
 
 local AssetManager = {}
@@ -11,19 +12,18 @@ local AssetManager = {}
 local REPO = "https://raw.githubusercontent.com/georgiy8/Pilgrammed-modular-utility/main/assets/"
 
 ------------------------------------------------------------
--- Assets
+-- Registered Assets
 ------------------------------------------------------------
 
-AssetManager.Files = {
+AssetManager.Assets = {
 
     "phantom.png",
-
     "click.wav",
 
 }
 
 ------------------------------------------------------------
--- Create Folder
+-- Create Assets Folder
 ------------------------------------------------------------
 
 function AssetManager:CreateFolder()
@@ -31,6 +31,8 @@ function AssetManager:CreateFolder()
     if not isfolder("assets") then
 
         makefolder("assets")
+
+        print("[AssetManager] Created assets folder.")
 
     end
 
@@ -40,13 +42,13 @@ end
 -- Download Asset
 ------------------------------------------------------------
 
-function AssetManager:Download(File)
+function AssetManager:Download(FileName)
 
-    local Url = REPO .. File
+    local Url = REPO .. FileName
 
-    local Path = "assets/" .. File
+    local Path = "assets/" .. FileName
 
-    print("[Assets] Downloading:", File)
+    print("[AssetManager] Downloading:", FileName)
 
     local Success, Data = pcall(function()
 
@@ -56,41 +58,73 @@ function AssetManager:Download(File)
 
     if not Success then
 
-        warn("[Assets] Failed to download:", File)
+        warn("[AssetManager] Failed to download:", FileName)
 
         return false
 
     end
 
-    writefile(Path, Data)
+    local WriteSuccess = pcall(function()
+
+        writefile(Path, Data)
+
+    end)
+
+    if not WriteSuccess then
+
+        warn("[AssetManager] Failed to save:", FileName)
+
+        return false
+
+    end
+
+    print("[AssetManager] Saved:", FileName)
 
     return true
 
 end
 
 ------------------------------------------------------------
--- Check Assets
+-- Check Asset
 ------------------------------------------------------------
 
-function AssetManager:Check()
+function AssetManager:Check(FileName)
+
+    local Path = "assets/" .. FileName
+
+    if isfile(Path) then
+
+        return true
+
+    end
+
+    return self:Download(FileName)
+
+end
+
+------------------------------------------------------------
+-- Check All Assets
+------------------------------------------------------------
+
+function AssetManager:CheckAll()
 
     self:CreateFolder()
 
-    for _, File in ipairs(self.Files) do
+    for _, FileName in ipairs(self.Assets) do
 
-        local Path = "assets/" .. File
-
-        if not isfile(Path) then
-
-            self:Download(File)
-
-        else
-
-            print("[Assets] Found:", File)
-
-        end
+        self:Check(FileName)
 
     end
+
+end
+
+------------------------------------------------------------
+-- Register Asset
+------------------------------------------------------------
+
+function AssetManager:Register(FileName)
+
+    table.insert(self.Assets, FileName)
 
 end
 
@@ -98,29 +132,27 @@ end
 -- Get Asset
 ------------------------------------------------------------
 
-function AssetManager:Get(File)
+function AssetManager:Get(FileName)
 
-    local Path = "assets/" .. File
+    if self:Check(FileName) then
 
-    if not isfile(Path) then
-
-        self:Download(File)
+        return getcustomasset("assets/" .. FileName)
 
     end
 
-    return getcustomasset(Path)
+    return nil
 
 end
 
 ------------------------------------------------------------
--- Init
+-- Initialize
 ------------------------------------------------------------
 
 function AssetManager:Init()
 
-    self:Check()
+    self:CheckAll()
 
-    print("[Assets] Ready.")
+    print("[AssetManager] Ready.")
 
 end
 
