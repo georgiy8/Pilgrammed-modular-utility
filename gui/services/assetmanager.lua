@@ -5,6 +5,8 @@
 
 local AssetManager = {}
 
+AssetManager.Downloaded = 0
+AssetManager.Verified = 0
 ------------------------------------------------------------
 -- Repository
 ------------------------------------------------------------
