@@ -72,6 +72,8 @@ function AssetManager:ScanFolder(GithubPath, LocalPath)
         warn("[AssetManager] Failed to scan:", GithubPath)
         return
     end
+
+    print(Response)
    
     local Items = game:GetService("HttpService"):JSONDecode(Response)
    
