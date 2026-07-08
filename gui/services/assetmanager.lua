@@ -42,6 +42,7 @@ function AssetManager:Download(Url, LocalPath)
         writefile(LocalPath, Data)
     end)
     if WriteSuccess then
+        self.Downloaded = self.Downloaded + 1
         print("[AssetManager] Saved:", LocalPath)
         return true
     end
@@ -64,29 +65,63 @@ function AssetManager:ScanFolder(GithubPath, LocalPath)
     end
     
     local Items = game:GetService("HttpService"):JSONDecode(Response)
-    
-    for _, item in ipairs(Items) do
-        local NewGithubPath = GithubPath .. "/" .. item.name
-        local NewLocalPath = LocalPath .. "/" .. item.name
-        
-        if item.type == "file" then
-            self:Download(item.download_url, NewLocalPath)
-        elseif item.type == "dir" then
-            print("[AssetManager] Entering folder:", item.name)
-            self:ScanFolder(NewGithubPath, NewLocalPath)
-        end
-    end
-end
 
+    ------------------------------------------------------------
+-- Recursive Scan
 ------------------------------------------------------------
+function AssetManager:ScanFolder(GithubPath, LocalPath)
+    local Url = "https://api.github.com/repos/" .. USER .. "/" .. REPO_NAME .. "/contents/" .. GithubPath .. "?ref=" .. BRANCH
+    
+    local Success, Response = pcall(function()
+        return game:HttpGet(Url)
+    end)
+    
+    if not Success then
+        warn("[AssetManager] Failed to scan:", GithubPath)
+        return
+    end
+    
+    local Items = game:GetService("HttpService"):JSONDecode(Response)
+        for _, item in ipairs(Items) do
+    local NewGithubPath = GithubPath .. "/" .. item.name
+    local NewLocalPath = LocalPath .. "/" .. item.name
+
+    if item.type == "file" then
+
+        if isfile(NewLocalPath) then
+
+            self.Verified = self.Verified + 1
+
+            print("[AssetManager] Verified:", NewLocalPath)
+
+        else
+
+            self:Download(item.download_url, NewLocalPath)
+
+        end
+
+    elseif item.type == "dir" then
+        print("[AssetManager] Entering folder:", item.name)
+        self:ScanFolder(NewGithubPath, NewLocalPath)
+
+    end
+
+end
+    
+---------------------------------------------------------
 -- Init
 ------------------------------------------------------------
 function AssetManager:Init()
+    self.Downloaded = 0
+    self.Verified = 0
     self:CreateFolder()
     print("[AssetManager] Starting recursive download from assets/...")
     self:ScanFolder("assets", "assets")
-    print("[AssetManager] All assets verified and downloaded.")
-end
+print(string.format(
+    "[AssetManager] Finished. Verified: %d | Downloaded: %d",
+    self.Verified,
+    self.Downloaded
+))
 
 ------------------------------------------------------------
 -- Get Asset
