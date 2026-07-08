@@ -750,7 +750,9 @@ local WidgetMethods = {
 
     "Keybind",
     
-    "Image"
+    "Image",
+
+    "Sound"
 
 }
 
