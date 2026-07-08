@@ -91,6 +91,8 @@ function Library.new()
 
     self.Windows = {}
 
+    self.AssetManager = AssetManager
+
     return self
 
 end
