@@ -31,25 +31,22 @@ function Image.Create(Parent, Settings)
 
     ImageObject.Parent = Parent
 
-    ImageObject.Size = UDim2.new(1,0,0,Height)
+    ImageObject.Size = UDim2.new(1,-10,0,Height)
 
     ImageObject.BackgroundTransparency = 1
 
     ImageObject.BorderSizePixel = 0
 
-    ImageObject.ClipsDescendants = true
-
     ImageObject.ScaleType = ScaleType
 
     ImageObject.Image = Settings.Image or ""
 
-ImageObject.ImageTransparency = Settings.Transparency or 0
+    ImageObject.ImageTransparency = Settings.Transparency or 0
 
-ImageObject.BackgroundColor3 = Settings.BackgroundColor or Color3.new(1,1,1)
+    ImageObject.BackgroundColor3 = Settings.BackgroundColor or Color3.new(1,1,1)
 
-    ImageObject.BackgroundTransparency = 0
-ImageObject.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-  
+    ImageObject.BackgroundTransparency = Settings.BackgroundTransparency or 1
+
     Instance.new("UICorner",ImageObject).CornerRadius = UDim.new(0,6)
 
     --------------------------------------------------------
@@ -91,10 +88,22 @@ function Image:SetHeight(Height)
 end
 
 ------------------------------------------------------------
+-- Set Visible
+------------------------------------------------------------
+
+function Image:SetVisible(State)
+
+    self.Instance.Visible = State
+
+end
+
+------------------------------------------------------------
 -- Set ScaleType
 ------------------------------------------------------------
 
 function Image:SetScaleType(ScaleType)
+
+    ImageObject.ClipsDescendants = true
 
     self.Instance.ScaleType = ScaleType
 
@@ -181,18 +190,6 @@ function Image:SetPadding(Pixels)
     )
 
 end
-
-------------------------------------------------------------
--- Set Visible
-------------------------------------------------------------
-
-function Image:SetVisible(State)
-
-    self.Instance.Visible = State
-
-end
-
-
 
 ------------------------------------------------------------
 -- Destroy
