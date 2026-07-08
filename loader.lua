@@ -41,7 +41,7 @@ local Modules = {
     "mining",
     "floating",
     "settings",
-    "Phantom-lancer"
+    "Phantom-lancer",
     "mp3player"
 }
 
