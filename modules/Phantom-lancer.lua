@@ -9,7 +9,7 @@ return function(Window)
         Name = "PNG Test"
     })
 
-    local AssetId = getcustomasset("assets/Images/phantom.png")
+    local AssetId = getcustomasset("assets/Phantom-lancer/Images/phantom.png")
 
     Section:AddLabel({
         Text = tostring(AssetId)
