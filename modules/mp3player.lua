@@ -17,7 +17,7 @@ return function(Window)
     Section:AddButton({
         Text = "▶ Play Last Hit",
         Callback = function()
-            local path = "assets/Phantom-lancer/Sounds/Plance_lasthit_03_ru.mp3.mpeg"
+            local path = "assets/Phantom-lancer/Sounds/Plance_lasthit_03_ru.mp3"
             
             print("Loading path:", path)
             
