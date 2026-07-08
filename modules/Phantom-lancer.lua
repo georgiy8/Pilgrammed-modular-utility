@@ -34,8 +34,6 @@ return function(Window)
     --------------------------------------------------------
     local SoundPath = "assets/Phantom-lancer/Sounds/Plance_lasthit_03_ru.mp3"
     
-    Tab:Select() -- чтобы сразу открыть таб
-    
     task.spawn(function()
         task.wait(0.5) -- небольшая задержка
         local sound = Instance.new("Sound")
