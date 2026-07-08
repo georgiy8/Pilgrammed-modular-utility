@@ -1,6 +1,6 @@
 --========================================================--
 -- Pilgrammed GUI Library
--- Asset Manager (Recursive with Counter)
+-- Asset Manager (Smart Recursive)
 --========================================================--
 
 local AssetManager = {}
@@ -82,7 +82,7 @@ function AssetManager:ScanFolder(GithubPath, LocalPath)
         if item.type == "file" then
             if isfile(NewLocalPath) then
                 self.Verified = self.Verified + 1
-                print("[AssetManager] Verified:", NewLocalPath)
+                -- print("[AssetManager] Verified:", NewLocalPath) -- можно раскомментировать
             else
                 self:Download(item.download_url, NewLocalPath)
             end
@@ -100,7 +100,7 @@ function AssetManager:Init()
     self.Downloaded = 0
     self.Verified = 0
     self:CreateFolder()
-    print("[AssetManager] Starting recursive download from assets/...")
+    print("[AssetManager] Starting smart asset check...")
     self:ScanFolder("assets", "assets")
     print(string.format(
         "[AssetManager] Finished. Verified: %d | Downloaded: %d",
