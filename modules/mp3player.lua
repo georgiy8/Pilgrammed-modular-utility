@@ -1,72 +1,70 @@
 --========================================================--
--- Sound Widget Test Module
+-- Pilgrammed GUI Library
+-- Sound Widget
 --========================================================--
 
-return function(Window)
-    local Tab = Window:CreateTab({
-        Name = "Sound Test",
-        Icon = "🔊"
-    })
+local Sound = {}
+Sound.__index = Sound
+
+function Sound.Create(Parent, Settings)
+    Settings = Settings or {}
+    local self = setmetatable({}, Sound)
     
-    local Section = Tab:CreateSection({
-        Name = "Sound Controls"
-    })
+    self.Sound = Instance.new("Sound")
+    self.Sound.SoundId = Settings.SoundId or ""
+    self.Sound.Volume = Settings.Volume or 0.5
+    self.Sound.PlaybackSpeed = Settings.Speed or 1
+    self.Sound.Looped = Settings.Looped or false
+    self.Sound.Parent = game:GetService("SoundService")
     
-    -- Создаём Sound Widget
-    local Music = Section:AddSound({
-        SoundId = getcustomasset("assets/Phantom-lancer/Sounds/Plance_lasthit_03_ru.mp3.mpeg"), -- замени на свой файл
-        ShowProgress = true,
-        Volume = 0.7
-    })
+    self.IsPlaying = false
     
-    Section:AddButton({
-        Text = "▶ Play",
-        Callback = function()
-            Music:Play()
-        end
-    })
-    
-    Section:AddButton({
-        Text = "⏸ Pause",
-        Callback = function()
-            Music:Pause()
-        end
-    })
-    
-    Section:AddButton({
-        Text = "⏹ Stop",
-        Callback = function()
-            Music:Stop()
-        end
-    })
-    
-    Section:AddSlider({
-        Text = "Volume",
-        Min = 0,
-        Max = 1,
-        Default = 0.7,
-        Increment = 0.05,
-        Callback = function(Value)
-            Music:SetVolume(Value)
-        end
-    })
-    
-    Section:AddSlider({
-        Text = "Speed",
-        Min = 0.5,
-        Max = 2,
-        Default = 1,
-        Increment = 0.1,
-        Callback = function(Value)
-            Music:SetPlaybackSpeed(Value)
-        end
-    })
-    
-    Section:AddToggle({
-        Text = "Loop",
-        Default = false,
-        Callback = function(State)
-            Music:SetLooped(State)
-        end
-    })
+    return self
 end
+
+function Sound:Play()
+    if self.Sound then
+        self.Sound:Play()
+        self.IsPlaying = true
+    end
+end
+
+function Sound:Pause()
+    if self.Sound then
+        self.Sound:Pause()
+        self.IsPlaying = false
+    end
+end
+
+function Sound:Stop()
+    if self.Sound then
+        self.Sound:Stop()
+        self.IsPlaying = false
+    end
+end
+
+function Sound:SetVolume(Volume)
+    if self.Sound then
+        self.Sound.Volume = Volume
+    end
+end
+
+function Sound:SetPlaybackSpeed(Speed)
+    if self.Sound then
+        self.Sound.PlaybackSpeed = Speed
+    end
+end
+
+function Sound:SetLooped(Looped)
+    if self.Sound then
+        self.Sound.Looped = Looped
+    end
+end
+
+function Sound:Destroy()
+    if self.Sound then
+        self.Sound:Destroy()
+    end
+end
+
+return Sound
