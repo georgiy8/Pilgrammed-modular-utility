@@ -29,25 +29,31 @@ local Widgets = {}
 -- Register Widgets
 ------------------------------------------------------------
 
-Widgets.label = Import("gui/widgets/label.lua")
+------------------------------------------------------------
+-- Register Widgets
+------------------------------------------------------------
 
-Widgets.button = Import("gui/widgets/button.lua")
+Widgets.Label = Import("gui/widgets/label.lua")
 
-Widgets.toggle = Import("gui/widgets/toggle.lua")
+Widgets.Button = Import("gui/widgets/button.lua")
 
-Widgets.slider = Import("gui/widgets/slider.lua")
+Widgets.Toggle = Import("gui/widgets/toggle.lua")
 
-Widgets.dropdown = Import("gui/widgets/dropdown.lua")
+Widgets.Slider = Import("gui/widgets/slider.lua")
 
-Widgets.textbox = Import("gui/widgets/textbox.lua")
+Widgets.Dropdown = Import("gui/widgets/dropdown.lua")
 
-Widgets.separator = Import("gui/widgets/separator.lua")
+Widgets.Textbox = Import("gui/widgets/textbox.lua")
 
-Widgets.keybind = Import("gui/widgets/keybind.lua")
+Widgets.Separator = Import("gui/widgets/separator.lua")
 
-Widgets.image = Import("gui/widgets/image.lua")
+Widgets.Keybind = Import("gui/widgets/keybind.lua")
 
-Widgets.sound = Import("gui/widgets/sound.lua")
+Widgets.Image = Import("gui/widgets/image.lua")
+
+Widgets.Sound = Import("gui/widgets/sound.lua")
+
+------------------------------------------------------------
 
 ------------------------------------------------------------
 
