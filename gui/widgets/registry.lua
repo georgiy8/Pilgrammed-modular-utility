@@ -29,25 +29,25 @@ local Widgets = {}
 -- Register Widgets
 ------------------------------------------------------------
 
-Widgets.Label = Import("gui/widgets/label.lua")
+Widgets.label = Import("gui/widgets/label.lua")
 
-Widgets.Button = Import("gui/widgets/button.lua")
+Widgets.button = Import("gui/widgets/button.lua")
 
-Widgets.Toggle = Import("gui/widgets/toggle.lua")
+Widgets.toggle = Import("gui/widgets/toggle.lua")
 
-Widgets.Slider = Import("gui/widgets/slider.lua")
+Widgets.slider = Import("gui/widgets/slider.lua")
 
-Widgets.Dropdown = Import("gui/widgets/dropdown.lua")
+Widgets.dropdown = Import("gui/widgets/dropdown.lua")
 
-Widgets.Textbox = Import("gui/widgets/textbox.lua")
+Widgets.textbox = Import("gui/widgets/textbox.lua")
 
-Widgets.Separator = Import("gui/widgets/separator.lua")
+Widgets.separator = Import("gui/widgets/separator.lua")
 
-Widgets.Keybind = Import("gui/widgets/keybind.lua")
+Widgets.keybind = Import("gui/widgets/keybind.lua")
 
-Widgets.Image = Import("gui/widgets/image.lua")
+Widgets.image = Import("gui/widgets/image.lua")
 
-Widgets.Sound = Import("gui/widgets/sound.lua")
+Widgets.sound = Import("gui/widgets/sound.lua")
 
 ------------------------------------------------------------
 
