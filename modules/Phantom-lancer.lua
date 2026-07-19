@@ -30,11 +30,11 @@ return function(Window)
         end,
 
         OnHover = function()
-            print("Mouse entered.")
+            
         end,
 
         OnLeave = function()
-            print("Mouse left.")
+           
         end
     })
 
