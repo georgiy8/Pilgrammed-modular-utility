@@ -83,6 +83,84 @@ end
 
     self.IsButton = IsButton
 
+    --------------------------------------------------------
+-- Button Events
+--------------------------------------------------------
+
+if IsButton then
+
+    if Settings.ClickSound then
+
+        ImageObject.MouseButton1Click:Connect(function()
+
+            if typeof(Settings.ClickSound) == "table" then
+
+                Settings.ClickSound:Play()
+
+            elseif typeof(Settings.ClickSound) == "string" then
+
+                local Sound = Instance.new("Sound")
+
+                Sound.SoundId = Settings.ClickSound
+
+                Sound.Parent = game:GetService("SoundService")
+
+                Sound:Play()
+
+                Sound.Ended:Connect(function()
+
+                Sound:Destroy()
+
+                end)
+
+            end
+
+        end)
+
+    end
+
+    if Settings.OnClick then
+
+        ImageObject.MouseButton1Click:Connect(function()
+
+            Settings.OnClick(self)
+
+        end)
+
+    end
+
+    if Settings.OnRightClick then
+
+        ImageObject.MouseButton2Click:Connect(function()
+
+            Settings.OnRightClick(self)
+
+        end)
+
+    end
+
+    if Settings.OnHover then
+
+        ImageObject.MouseEnter:Connect(function()
+
+            Settings.OnHover(self)
+
+        end)
+
+    end
+
+    if Settings.OnLeave then
+
+        ImageObject.MouseLeave:Connect(function()
+
+            Settings.OnLeave(self)
+
+        end)
+
+    end
+
+end
+
     return self
 
 end
@@ -238,6 +316,72 @@ function Image:SetAspectRatio(Ratio)
     end
 
     Constraint.AspectRatio = Ratio
+
+end
+
+------------------------------------------------------------
+-- Button API
+------------------------------------------------------------
+
+function Image:IsButton()
+
+    return self.IsButton
+
+end
+
+function Image:OnClick(Callback)
+
+    if self.IsButton then
+
+        return self.Instance.MouseButton1Click:Connect(function()
+
+            Callback(self)
+
+        end)
+
+    end
+
+end
+
+function Image:OnRightClick(Callback)
+
+    if self.IsButton then
+
+        return self.Instance.MouseButton2Click:Connect(function()
+
+            Callback(self)
+
+        end)
+
+    end
+
+end
+
+function Image:OnHover(Callback)
+
+    if self.IsButton then
+
+        return self.Instance.MouseEnter:Connect(function()
+
+            Callback(self)
+
+        end)
+
+    end
+
+end
+
+function Image:OnLeave(Callback)
+
+    if self.IsButton then
+
+        return self.Instance.MouseLeave:Connect(function()
+
+            Callback(self)
+
+        end)
+
+    end
 
 end
 
