@@ -301,5 +301,103 @@ function SoundWidget.FromAsset(AssetManager, Name, Parent)
 end
 
 ------------------------------------------------------------
+-- GUI Binding
+------------------------------------------------------------
+
+function SoundWidget.Bind(Object, Sounds)
+
+    if not Object or not Sounds then
+        return
+    end
+
+    if Object.Instance then
+        Object = Object.Instance
+    end
+
+    local function PlaySound(Path)
+
+        if not Path then
+            return
+        end
+
+        SoundWidget.Play(Path)
+
+    end
+
+    if Sounds.Click and Object:IsA("GuiButton") then
+
+        Object.MouseButton1Click:Connect(function()
+
+            PlaySound(Sounds.Click)
+
+        end)
+
+    end
+
+    if Sounds.RightClick then
+
+        Object.InputBegan:Connect(function(Input)
+
+            if Input.UserInputType == Enum.UserInputType.MouseButton2 then
+
+                PlaySound(Sounds.RightClick)
+
+            end
+
+        end)
+
+    end
+
+    if Sounds.Hover then
+
+        Object.MouseEnter:Connect(function()
+
+            PlaySound(Sounds.Hover)
+
+        end)
+
+    end
+
+    if Sounds.Leave then
+
+        Object.MouseLeave:Connect(function()
+
+            PlaySound(Sounds.Leave)
+
+        end)
+
+    end
+
+    if Sounds.Press then
+
+        Object.InputBegan:Connect(function(Input)
+
+            if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+
+                PlaySound(Sounds.Press)
+
+            end
+
+        end)
+
+    end
+
+    if Sounds.Release then
+
+        Object.InputEnded:Connect(function(Input)
+
+            if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+
+                PlaySound(Sounds.Release)
+
+            end
+
+        end)
+
+    end
+
+end
+
+------------------------------------------------------------
 
 return SoundWidget
