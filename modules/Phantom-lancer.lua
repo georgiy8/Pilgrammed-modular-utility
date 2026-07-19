@@ -1,30 +1,59 @@
 return function(Window)
+
     local Tab = Window:CreateTab({
+
         Name = "Asset Test",
+
         Icon = "🖼️"
+
     })
+
     local Section = Tab:CreateSection({
-        Name = "PNG Test"
+
+        Name = "Image Button Test"
+
     })
-    
-    local path = "assets/Phantom-lancer/Images/phantom.png"
-    local AssetId = getcustomasset(path)
-    
+
+    local ImageAsset = Assets:GetImage("phantom.png")
+
+    local ClickSound = Assets:GetSound("Plance_lasthit_03_ru.mp3")
+
     Section:AddLabel({
-        Text = "Path: " .. path
+
+        Text = "Click the image."
+
     })
-    Section:AddLabel({
-        Text = "AssetId: " .. tostring(AssetId)
+
+    Section:AddImage({
+
+        Image = ImageAsset,
+
+        Height = 320,
+
+        AspectRatio = 16/9,
+
+        Button = true,
+
+        ClickSound = ClickSound,
+
+        OnClick = function()
+
+            print("Image clicked!")
+
+        end,
+
+        OnHover = function()
+
+            print("Mouse entered.")
+
+        end,
+
+        OnLeave = function()
+
+            print("Mouse left.")
+
+        end
+
     })
-    
-    if AssetId then
-        Section:AddImage({
-            Image = AssetId,
-            Height = 320,
-            AspectRatio = 16/9
-        })
-        Section:AddLabel({ Text = "✅ Image should appear above" })
-    else
-        Section:AddLabel({ Text = "❌ getcustomasset returned nil" })
-    end
+
 end
