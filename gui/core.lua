@@ -393,7 +393,7 @@ function Window:CreateTab(Settings)
 
     Button.Parent = self.TabPanel
 
-    Button.Size = UDim2.new(1,-8,0,32)
+    Button.Size = UDim2.new(1,-12,0,32)
 
     Button.BackgroundColor3 = Color3.fromRGB(60,60,60)
 
