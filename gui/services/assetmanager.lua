@@ -33,7 +33,7 @@ AssetManager.Duplicates = {}
 ------------------------------------------------------------
 
 local USER = "georgiy8"
-local REPO = "Pilgrammed-modular-utility"
+local REPO = "Universal-modular-utility"
 local BRANCH = "main"
 
 ------------------------------------------------------------
