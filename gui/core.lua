@@ -7,7 +7,7 @@
 -- Repository
 ------------------------------------------------------------
 
-local REPO = "https://raw.githubusercontent.com/georgiy8/Pilgrammed-modular-utility/main/"
+local REPO = "https://raw.githubusercontent.com/georgiy8/Universal-modular-utility/main/"
 
 local function Import(Path)
 
