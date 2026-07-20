@@ -49,6 +49,7 @@ _G.Assets = AssetManager
 ------------------------------------------------------------
 
 local Widgets = Import("gui/widgets/registry.lua")
+
 print("Widgets table:", Widgets)
 
 for k, v in pairs(Widgets) do
