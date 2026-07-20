@@ -49,8 +49,6 @@ _G.Assets = AssetManager
 ------------------------------------------------------------
 
 local Widgets = Import("gui/widgets/registry.lua")
-_G.SoundWidget = Widgets.sound
- 
 print("Widgets table:", Widgets)
 
 for k, v in pairs(Widgets) do
