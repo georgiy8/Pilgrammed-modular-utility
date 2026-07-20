@@ -3,7 +3,7 @@
 -- Loader v1.0
 --========================================================--
 
-local REPO = "https://raw.githubusercontent.com/georgiy8/Pilgrammed-modular-utility/main/"
+local REPO = "https://raw.githubusercontent.com/georgiy8/Universal-modular-utility/main/"
 
 -- Простая система импорта файлов из GitHub
 local function Import(path)
