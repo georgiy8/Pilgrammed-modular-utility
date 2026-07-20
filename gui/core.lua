@@ -55,7 +55,7 @@ for k, v in pairs(Widgets) do
     print("[Widget]", k, v)
 end
 
-print("Label =", Widgets.Label)
+print("Label =", Widgets.Label) 
 
 ------------------------------------------------------------
 -- Library
