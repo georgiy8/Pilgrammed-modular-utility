@@ -1,5 +1,9 @@
 return function(Window)
 
+    local Assets = _G.Assets
+
+assert(Assets, "AssetManager is not initialized.")
+
     local Tab = Window:CreateTab({
         Name = "Widget Test",
         Icon = "🧪"
