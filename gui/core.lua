@@ -49,6 +49,7 @@ _G.Assets = AssetManager
 ------------------------------------------------------------
 
 local Widgets = Import("gui/widgets/registry.lua")
+_G.SoundWidget = Widgets.Sound
 
 print("Widgets table:", Widgets)
 
